@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>السيطرة الاستراتيجية: خريطة سوريا والشرق الأوسط</title>
+<style>
+:root{
+  --bg:#070b12; --panel:rgba(14,20,32,.92); --panel2:rgba(22,30,46,.95);
+  --text:#e8eef8; --muted:#8a97ad; --line:rgba(120,150,200,.22);
+  --accent:#4fc3f7; --gold:#f5c542; --danger:#ff5c5c; --ok:#4ade80;
+  --c-regime:#e53935; --c-opp:#43a047; --c-qsd:#fdd835; --c-isis:#424242; --c-purple:#8e24aa;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ --bg:#dfe7f1; --panel:rgba(255,255,255,.94); --panel2:rgba(240,244,250,.96); --text:#15202f; --muted:#56647a; --line:rgba(60,90,140,.25); }
+}
+:root[data-theme="dark"]{ --bg:#070b12; --panel:rgba(14,20,32,.92); --panel2:rgba(22,30,46,.95); --text:#e8eef8; --muted:#8a97ad; --line:rgba(120,150,200,.22); }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;font-size:14px;user-select:none}
+button{font-family:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:8px;padding:6px 10px;font-size:13px;transition:transform .1s, background .2s}
+button:active{transform:scale(.96)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.primary{background:linear-gradient(135deg,#1e88e5,#1565c0);border-color:#1e88e5;color:#fff;font-weight:700}
+button.gold{background:linear-gradient(135deg,#f5c542,#c99a1a);color:#1a1200;border-color:#f5c542;font-weight:700}
+button.danger{background:linear-gradient(135deg,#e53935,#8e1b1b);color:#fff;border-color:#e53935;font-weight:700}
+input,select{font-family:inherit;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:14px;width:100%}
+.hidden{display:none !important}
+
+/* ===== Lobby ===== */
+#lobby{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;padding:16px;background:radial-gradient(circle at 50% 0%,#1b2a47 0%,#070b12 70%)}
+.glass{background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.lobby-card{width:100%;max-width:760px;margin-top:8px;padding:16px}
+.title{font-size:clamp(18px,4.5vw,26px);font-weight:900;text-align:center;color:var(--gold);margin-bottom:4px}
+.subtitle{text-align:center;color:var(--muted);font-size:12px;margin-bottom:12px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.tab{font-size:12px;padding:8px 4px}
+.tab.active{background:linear-gradient(135deg,#1e88e5,#1565c0);color:#fff;border-color:#1e88e5}
+.pane{display:none}.pane.active{display:block}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.row>*{flex:1 1 140px}
+.label{font-size:12px;color:var(--muted);margin-bottom:4px}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.mode{font-size:12px;text-align:center}
+.mode.active{border-color:var(--gold);color:var(--gold)}
+.factions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.fcard{border-radius:10px;padding:10px;border:2px solid;font-size:12px;line-height:1.6}
+.fcard h4{font-size:14px;margin-bottom:2px}
+.fcard.regime{border-color:var(--c-regime);background:rgba(229,57,53,.12)}
+.fcard.opp{border-color:var(--c-opp);background:rgba(67,160,71,.12)}
+.fcard.qsd{border-color:var(--c-qsd);background:rgba(253,216,53,.1)}
+.fcard.isis{border-color:#9e9e9e;background:rgba(66,66,66,.25)}
+.fcard.purple{border-color:var(--c-purple);background:rgba(142,36,170,.12)}
+.grid-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{padding:10px;text-align:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
+.stat b{display:block;font-size:20px;color:var(--gold)}
+.small{font-size:12px;color:var(--muted)}
+.task{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--panel2)}
+.task .bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:6px}
+.task .bar i{display:block;height:100%;background:var(--ok)}
+.crate{text-align:center;padding:12px;border-radius:12px;border:1px dashed var(--gold);margin-bottom:10px}
+.skin-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.skin-item{padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);font-size:12px;text-align:center}
+.skin-item.equipped{border-color:var(--gold);box-shadow:0 0 10px rgba(245,197,66,.4)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:100;background:#0d1626;border:1px solid var(--gold);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;max-width:92vw;text-align:center}
+.toast.show{opacity:1}
+
+/* ===== Game HUD ===== */
+#game{position:fixed;inset:0;display:flex;flex-direction:column}
+#hud{flex:0 0 auto;padding:4px 6px;background:var(--panel);border-bottom:1px solid var(--line);z-index:5}
+.hud-top{display:flex;align-items:center;justify-content:space-between;gap:4px;flex-wrap:wrap;font-size:12px}
+.hud-top .info{display:flex;gap:6px;align-items:center;flex-wrap:wrap;min-width:0}
+.hud-top .btns{display:flex;gap:4px;flex-wrap:wrap}
+.hud-top button{padding:3px 7px;font-size:11px}
+#timer{font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+#supportLbl{color:var(--muted);font-size:11px}
+.scores{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:4px}
+.score{border-radius:8px;padding:3px 4px;text-align:center;font-size:11px;border:1px solid transparent;background:var(--panel2);min-width:0}
+.score b{display:block;font-size:13px;font-variant-numeric:tabular-nums}
+.score span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.score.leader{border-color:var(--gold);box-shadow:0 0 8px rgba(245,197,66,.45)}
+.score.dead{opacity:.45;text-decoration:line-through}
+.sc-regime{border-top:3px solid var(--c-regime)}
+.sc-opp{border-top:3px solid var(--c-opp)}
+.sc-qsd{border-top:3px solid var(--c-qsd)}
+.sc-isis{border-top:3px solid #9e9e9e}
+.sc-purple{border-top:3px solid var(--c-purple)}
+.drawer{display:none;margin-top:4px;padding:6px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);gap:6px;flex-wrap:wrap}
+.drawer.open{display:flex}
+.drawer button{font-size:11px;padding:4px 8px}
+.drawer .chk{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.drawer .chk input{width:auto}
+#mapWrap{flex:1 1 auto;position:relative;overflow:hidden;min-height:0}
+#mapCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.camBtns{position:absolute;left:8px;bottom:8px;display:flex;flex-direction:column;gap:6px;z-index:4}
+.camBtns button{width:40px;height:40px;font-size:18px;padding:0;border-radius:50%}
+.bottomBar{flex:0 0 auto;padding:6px;background:var(--panel);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px;z-index:5}
+.sendRow{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.sendRow .pct{flex:1 1 0;font-size:11px;padding:5px 2px}
+.sendRow .pct.active{border-color:var(--gold);color:var(--gold)}
+.sendRow .hint{font-size:11px;color:var(--muted);flex:1 1 100%}
+.bottomBar .ability-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ability{font-size:12px;padding:8px 6px;position:relative;overflow:hidden}
+.ability .cd{position:absolute;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;font-weight:700;color:var(--gold)}
+.ability.cooling .cd{display:flex}
+.emotes{position:absolute;pointer-events:none;z-index:3;font-size:18px;transform:translate(-50%,-100%)}
+.centerMsg{position:absolute;left:50%;top:14%;transform:translateX(-50%);z-index:6;pointer-events:none;background:rgba(0,0,0,.7);color:#fff;padding:6px 12px;border-radius:10px;font-size:14px;white-space:nowrap;display:none}
+.centerMsg.show{display:block}
+.noise{position:absolute;inset:0;z-index:7;pointer-events:none;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
+.noise.show{display:flex}
+#infoPanel{position:absolute;right:8px;top:8px;z-index:6;width:min(260px,70vw);display:none;padding:10px;font-size:12px;line-height:1.7}
+#infoPanel.show{display:block}
+
+/* ===== Overlays ===== */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:14px}
+.overlay .box{width:min(420px,100%);padding:18px;text-align:center;max-height:90vh;overflow:auto}
+.overlay h2{color:var(--gold);margin-bottom:8px;font-size:20px}
+.overlay table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+.overlay td,.overlay th{padding:6px;border-bottom:1px solid var(--line)}
+.overlay .btnrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.overlay .btnrow button{flex:1 1 120px}
+.hiddenPane{display:none}
+/* Responsive */
+@media (max-width:520px){
+  .tabs{grid-template-columns:repeat(2,1fr)}
+  .factions,.grid-list{grid-template-columns:1fr}
+  .scores{gap:3px}
+  .score b{font-size:12px}
+}
+@media (min-width:900px){
+  .hud-top{font-size:13px}
+  .score b{font-size:15px}
+}
+</style>
+</head>
+<body>
+<!-- ===== الردهة ===== -->
+<div id="lobby">
+  <div class="glass lobby-card">
+    <div class="title">السيطرة الاستراتيجية</div>
+    <div class="subtitle">خريطة سوريا والشرق الأوسط — تكتيك، أرتال، وسيطرة على الأراضي</div>
+    <div class="tabs">
+      <button class="tab active" data-tab="battle">غرفة المعركة</button>
+      <button class="tab" data-tab="tree">شجرة القادة</button>
+      <button class="tab" data-tab="daily">المهام اليومية</button>
+      <button class="tab" data-tab="loot">الغنائم والمظاهر</button>
+    </div>
+
+    <!-- غرفة المعركة -->
+    <div class="pane active" id="pane-battle">
+      <div class="row">
+        <div><div class="label">اسم القائد</div><input id="playerName" maxlength="16" placeholder="القائد"></div>
+        <div><div class="label">رمز الغرفة</div><input id="roomCode" maxlength="8" placeholder="مثال: ALPHA1"></div>
+      </div>
+      <div class="label">طور اللعب</div>
+      <div class="modes">
+        <button class="mode active" data-mode="classic">المعركة الكلاسيكية</button>
+        <button class="mode" data-mode="unknown">الاجتياح المجهول</button>
+        <button class="mode" data-mode="pockets">الجيوب المعزولة</button>
+      </div>
+      <div class="factions" id="factionCards"></div>
+      <div class="row">
+        <button class="primary" id="btnCreate">إنشاء غرفة</button>
+        <button id="btnJoin">انضمام لغرفة</button>
+        <button class="gold" id="btnAdReward">🎬 مكافأة إعلان (+20% قوات بداية)</button>
+      </div>
+      <div class="small" id="lobbyNote">تُملأ الغرفة تلقائياً بالبوتات. اختر فصيلك من البطاقات ثم ابدأ.</div>
+    </div>
+
+    <!-- شجرة القادة -->
+    <div class="pane" id="pane-tree">
+      <div class="small" style="margin-bottom:8px">الذهب: <b id="goldTree" style="color:var(--gold)">0</b> — افتح القادة ثم عيّن أحدهم لفصيلك.</div>
+      <div class="grid-list" id="leaderList"></div>
+    </div>
+
+    <!-- المهام اليومية -->
+    <div class="pane" id="pane-daily">
+      <div class="small" style="margin-bottom:8px">تتجدد المهام يومياً. أكمل الهدف ثم استلم المكافأة.</div>
+      <div id="taskList"></div>
+    </div>
+
+    <!-- الغنائم -->
+    <div class="pane" id="pane-loot">
+      <div class="crate">
+        <div><b>صندوق الغنائم</b></div>
+        <div class="small">السعر: 120 ذهب — يحتوي مظهراً عشوائياً</div>
+        <button class="gold" id="btnOpenCrate" style="margin-top:8px">فتح صندوق (120 ذهب)</button>
+      </div>
+      <div class="skin-list" id="skinList"></div>
+      <div class="small" style="margin-top:8px">المظهر المفعّل يغيّر شكل الأرتال على الخريطة.</div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <div class="stat"><span class="small">الذهب</span><b id="statGold">0</b></div>
+      <div class="stat"><span class="small">الخبرة</span><b id="statXp">0</b></div>
+      <div class="stat"><span class="small">المستوى</span><b id="statLvl">1</b></div>
+      <div class="stat"><span class="small">الانتصارات</span><b id="statWins">0</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== اللعب ===== -->
+<div id="game" class="hidden">
+  <div id="hud">
+    <div class="hud-top">
+      <div class="info">
+        <span>الفصيل: <b id="hudFaction">—</b></span>
+        <span>⏱ <b id="timer">05:00</b></span>
+        <span id="supportLbl">دعم خارجي: —</span>
+      </div>
+      <div class="btns">
+        <button id="btnTools">⚙️ أدوات وأحداث</button>
+        <button id="btnEmote">💬</button>
+        <button id="btnAbout">📺 شحن</button>
+        <button id="btnSound">🔊</button>
+        <button id="btnHelp">؟</button>
+        <button class="danger" id="btnQuit">خروج</button>
+      </div>
+    </div>
+    <div class="drawer" id="toolsDrawer">
+      <label class="chk"><input type="checkbox" id="fogToggle"> ضباب الحرب</label>
+      <button id="btnRefill">إمداد فوري (+30 لكل منطقة)</button>
+      <button id="btnTestStorm">تجربة العاصفة</button>
+      <button id="btnTestJam">تجربة التشويش</button>
+    </div>
+    <div class="drawer" id="emoteDrawer">
+      <button data-emote="😂">😂</button>
+      <button data-emote="🔥">🔥</button>
+      <button data-emote="🏳️">🏳️</button>
+      <button data-emote="💀">💀</button>
+      <button data-emote="🤝">🤝</button>
+      <button id="btnTargetLeader">🎯 المتصدر</button>
+    </div>
+    <div class="scores" id="scoreRow"></div>
+  </div>
+
+  <div id="mapWrap">
+    <canvas id="mapCanvas"></canvas>
+    <div class="camBtns">
+      <button id="camIn">+</button>
+      <button id="camOut">-</button>
+      <button id="camReset">⟲</button>
+      <button id="camWorld">🌍</button>
+    </div>
+    <div id="infoPanel" class="glass"></div>
+    <div class="centerMsg" id="centerMsg"></div>
+    <div class="noise" id="jamOverlay">📡 انقطاع الاتصالات — أوامر الهجوم متوقفة</div>
+  </div>
+
+  <div class="bottomBar">
+    <div class="sendRow">
+      <button class="pct" data-pct="0.25">25% استطلاع</button>
+      <button class="pct" data-pct="0.5">50%</button>
+      <button class="pct active" data-pct="0.75">75%</button>
+      <button class="pct" data-pct="1">100%</button>
+      <span class="hint" id="sendHint">انقر منطقتك ثم انقر هدفاً لإرسال الرتل — أو اسحب بينهما.</span>
+    </div>
+    <div class="ability-row">
+      <button class="ability primary" id="abSupport"><span id="abSupportTxt">الدعم البري</span><div class="cd" id="cdSupport"></div></button>
+      <button class="ability danger" id="abStrike"><span id="abStrikeTxt">القصف الجوي</span><div class="cd" id="cdStrike"></div></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== نهاية الجولة ===== -->
+<div class="overlay hidden" id="endOverlay">
+  <div class="glass box">
+    <h2 id="endTitle">انتهت الجولة</h2>
+    <div class="small" id="endReason"></div>
+    <table><thead><tr><th>#</th><th>الفصيل</th><th>المناطق</th><th>الجنود</th></tr></thead><tbody id="endTable"></tbody></table>
+    <div class="small" id="endRewards"></div>
+    <div class="btnrow">
+      <button class="primary" id="btnAgain">جولة جديدة</button>
+      <button id="btnToLobby">الردهة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== المساعدة ===== -->
+<div class="overlay hidden" id="helpOverlay">
+  <div class="glass box" style="text-align:right">
+    <h2>كيف تلعب؟</h2>
+    <p class="small" style="line-height:1.9">
+      • انقر منطقتك ثم منطقة مجاورة (أو مرتبطة بطريق) لإرسال رتل.<br>
+      • الاسحب من منطقتك إلى الهدف إرسال سريع.<br>
+      • عند تقاطع رتلين متعاديين على الطريق يشتبكان.<br>
+      • الدعم الخارجي يصل كل 10 ثوانٍ، والمتصدر يحصل على أقل دعم.<br>
+      • الدعم البري يعزّز منطقتك، والقصف الجوي يدمر جزءاً من عدوك.<br>
+      • الفوز: السيطرة الكاملة، أو أكبر عدد مناطق عند انتهاء الوقت.
+    </p>
+    <div class="btnrow"><button class="primary" id="btnHelpClose">حسناً</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<canvas id="hiddenCanvas" width="1" height="1" style="display:none"></canvas>
+<script>
+/* ================= البيانات الجغرافية ================= */
+const MAP = { lon0: 27, lat1: 43, kx: 0.866, worldW: 35*0.866, worldH: 30 };
+function proj(lon, lat){ return { x: (lon - MAP.lon0) * MAP.kx, y: (MAP.lat1 - lat) }; }
+function projPoly(pts){ return pts.map(p => proj(p[0], p[1])); }
+
+const FACTIONS = {
+  regime:{ id:0, key:'regime', name:'قوات النظام', color:'#e53935', rgb:'229,57,53', troops:225,
+    feat:'دفاع +20%', atk:0, def:0.20, spd:0, prod:0, cls:'regime', supName:'دعم بري: إيران وحزب الله', strName:'دعم جوي روسي', supBase:'دمشق', ext:'🇱🇧 لبنان / حزب الله' },
+  opp:{ id:1, key:'opp', name:'فصائل المعارضة', color:'#43a047', rgb:'67,160,71', troops:165,
+    feat:'هجوم +10% • سرعة +25% • إنتاج +5%', atk:0.10, def:0, spd:0.25, prod:0.05, cls:'opp', supName:'تعزيزات الفصائل', strName:'قصف راجمات', supBase:'حلب', ext:'🇹🇷 تركيا' },
+  qsd:{ id:2, key:'qsd', name:'قوات قسد', color:'#fdd835', rgb:'253,216,53', troops:130,
+    feat:'إنتاج +30%', atk:0, def:0, spd:0, prod:0.30, cls:'qsd', supName:'إمداد التحالف', strName:'غارة التحالف', supBase:'الحسكة', ext:'🇯🇴 التحالف / الأردن' },
+  isis:{ id:3, key:'isis', name:'تنظيم الدولة', color:'#9e9e9e', rgb:'158,158,158', troops:120,
+    feat:'هجوم +25% • دفاع -10% • إنتاج +10%', atk:0.25, def:-0.10, spd:0, prod:0.10, cls:'isis', supName:'أرتال البادية', strName:'تفجير خطوط', supBase:'دير الزور', ext:'🇮🇶 الأنبار / العراق' },
+  purple:{ id:4, key:'purple', name:'الغزاة الأرجوانيون', color:'#8e24aa', rgb:'142,36,170', troops:0,
+    feat:'توسع سريع • هجوم +30%', atk:0.30, def:0, spd:0.15, prod:0.25, cls:'purple', supName:'اجتياح أرجواني', strName:'اجتياح مفاجئ', supBase:'', ext:'🌐 قوى مجهولة' }
+};
+const FKEYS = ['regime','opp','qsd','isis'];
+const FBYID = ['regime','opp','qsd','isis','purple'];
+
+/* 15 منطقة تكتيكية في سوريا (lon,lat) */
+const REGION_DEFS = [
+  { id:0, name:'اللاذقية', owner:0, troops:30, poly:[[35.85,35.95],[36.05,36.6],[36.1,36.7],[36.25,36.45],[36.1,35.95],[36.0,35.55],[35.8,35.2],[35.75,35.5]], lab:[35.98,35.7] },
+  { id:1, name:'طرطوس', owner:0, troops:25, poly:[[35.75,35.2],[36.0,35.55],[36.1,35.85],[36.05,35.1],[36.1,34.75],[35.9,34.6],[35.72,34.9]], lab:[35.9,34.95] },
+  { id:2, name:'إدلب', owner:1, troops:50, poly:[[36.1,35.95],[36.25,36.45],[36.6,36.75],[37.05,36.7],[37.1,36.0],[36.8,35.8],[36.2,35.8]], lab:[36.6,36.2] },
+  { id:3, name:'حلب', owner:1, troops:55, poly:[[36.6,36.7],[37.05,36.7],[37.5,36.9],[38.3,36.95],[38.4,36.2],[38.0,35.9],[37.5,35.9],[37.1,36.0],[36.8,35.8],[36.6,36.0]], lab:[37.45,36.4] },
+  { id:4, name:'حماة', owner:0, troops:30, poly:[[36.0,35.55],[36.2,35.8],[36.8,35.8],[37.1,36.0],[37.3,35.5],[37.2,35.0],[36.9,34.9],[36.6,35.0],[36.2,35.1],[36.0,35.2]], lab:[36.7,35.4] },
+  { id:5, name:'حمص', owner:0, troops:35, poly:[[36.0,35.2],[36.2,35.1],[36.6,35.0],[36.9,34.9],[37.2,35.0],[37.3,34.5],[37.1,34.1],[36.6,33.9],[36.3,34.0],[36.0,34.4],[35.9,34.7]], lab:[36.55,34.5] },
+  { id:6, name:'دمشق', owner:0, troops:50, poly:[[36.2,33.6],[36.5,33.65],[36.45,33.35],[36.2,33.3]], lab:[36.33,33.48] },
+  { id:7, name:'ريف دمشق', owner:0, troops:35, poly:[[35.95,33.45],[36.2,33.3],[36.45,33.35],[36.5,33.65],[37.1,33.75],[37.5,33.5],[38.5,33.3],[38.6,32.7],[38.0,32.9],[37.2,32.9],[36.6,32.8],[36.2,32.95]], lab:[37.1,33.2] },
+  { id:8, name:'درعا', owner:1, troops:35, poly:[[35.8,33.0],[36.2,33.25],[36.2,32.95],[36.2,32.6],[35.85,32.5],[35.8,32.7]], lab:[35.98,32.8] },
+  { id:9, name:'القنيطرة', owner:1, troops:25, poly:[[35.75,33.2],[35.95,33.5],[36.25,33.4],[36.25,33.25],[35.9,33.05]], lab:[35.97,33.3] },
+  { id:10, name:'السويداء', owner:0, troops:20, poly:[[36.2,32.95],[36.6,32.8],[37.2,32.9],[37.0,32.5],[36.5,32.4],[36.2,32.6]], lab:[36.6,32.65] },
+  { id:11, name:'الرقة', owner:2, troops:60, poly:[[38.3,36.95],[39.8,36.8],[39.9,36.2],[39.2,35.8],[38.4,35.8],[38.25,36.2]], lab:[38.9,36.3] },
+  { id:12, name:'الحسكة', owner:2, troops:70, poly:[[39.8,36.75],[40.5,37.2],[41.5,37.2],[42.4,37.15],[42.4,36.4],[41.6,36.1],[41.1,35.8],[40.4,35.9],[39.9,36.2]], lab:[41.0,36.6] },
+  { id:13, name:'دير الزور', owner:3, troops:65, poly:[[39.2,35.8],[39.9,36.2],[40.5,35.9],[41.0,35.6],[41.3,34.7],[40.3,34.2],[39.4,34.5]], lab:[40.4,35.1] },
+  { id:14, name:'تدمر والبادية', owner:3, troops:55, poly:[[37.5,35.3],[38.4,35.8],[39.2,35.8],[39.4,34.5],[40.3,34.2],[40.2,33.2],[39.0,32.5],[38.0,32.7],[37.2,33.8],[36.9,34.6]], lab:[38.6,34.1] }
+];
+/* الطرق: [من, إلى, نوع] نوع: m = أوتوستراد، r = طريق، d = بادية */
+const ROADS = [
+  [0,1,'r'],[0,2,'r'],[2,3,'m'],[2,4,'r'],[3,4,'m'],[4,5,'m'],[5,1,'r'],[5,6,'m'],[5,14,'d'],
+  [14,13,'d'],[13,11,'r'],[11,12,'r'],[12,13,'r'],[6,7,'r'],[7,10,'r'],[7,14,'d'],[6,8,'m'],
+  [8,9,'r'],[9,10,'r'],[8,10,'r'],[4,14,'d'],[11,14,'d'],[9,7,'r'],[3,11,'r']
+];
+/* أقسام الدول المحيطة (lon,lat) */
+const COUNTRIES = {
+  turkey:[[26.1,40.6],[29.0,41.2],[33.0,42.0],[36.5,41.5],[41.5,41.5],[44.8,40.8],[44.8,39.5],[44.2,37.2],[42.5,37.1],[40.5,37.1],[38.5,36.9],[36.2,36.7],[36.0,36.2],[35.3,36.8],[34.5,36.3],[32.5,36.1],[30.5,36.2],[29.0,36.6],[27.5,37.0],[26.5,38.5],[26.8,39.8]],
+  iraq:[[38.8,33.0],[39.3,32.4],[40.8,34.7],[41.0,34.9],[41.3,36.5],[42.4,37.1],[44.5,37.2],[45.5,35.2],[46.0,33.0],[48.0,30.9],[47.7,29.9],[45.0,29.1],[42.6,31.0],[41.0,32.0],[38.8,33.0]],
+  iran:[[44.0,39.4],[48.0,38.5],[53.0,37.3],[57.0,38.0],[61.0,36.5],[61.0,31.0],[63.3,25.2],[61.5,25.0],[57.3,25.9],[54.0,26.6],[51.6,27.8],[50.0,30.0],[48.5,30.5],[47.7,29.9],[45.0,29.1],[46.0,33.0],[45.5,35.2],[44.5,37.2],[44.2,39.0]],
+  jordan:[[35.0,32.6],[35.6,33.2],[36.5,33.2],[37.3,32.9],[38.8,32.4],[39.3,32.2],[38.8,31.0],[37.0,29.5],[35.0,29.5]],
+  lebanon:[[35.1,33.1],[35.6,34.6],[36.0,34.6],[36.6,33.9],[36.3,33.6],[35.9,33.3],[35.6,33.1]],
+  israel:[[34.3,31.3],[34.3,31.7],[34.9,32.8],[35.6,33.1],[35.5,32.6],[35.4,31.8],[35.2,31.0],[35.0,29.5],[34.9,29.5]],
+  egypt:[[25.0,22.0],[32.0,22.0],[36.9,22.0],[37.0,24.0],[35.0,27.0],[34.6,28.0],[34.9,29.5],[34.3,31.3],[32.3,31.3],[31.0,31.5],[29.9,31.5],[27.5,31.2],[25.0,31.6]],
+  arabia:[[34.9,29.5],[37.0,29.5],[38.8,31.0],[39.3,32.2],[41.0,32.0],[42.6,31.0],[45.0,29.1],[47.7,29.9],[48.3,28.0],[50.0,26.5],[51.6,24.2],[56.4,26.3],[56.9,24.5],[59.0,22.5],[55.0,17.0],[52.0,16.0],[43.5,12.7],[42.5,16.0],[39.0,21.0],[37.0,25.0],[34.6,28.0]],
+  cyprus:[[32.3,35.7],[34.6,35.7],[34.0,34.6],[32.4,34.7]],
+  africa:[[25.0,31.6],[25.0,12.0],[27.0,12.0],[27.0,22.0],[25.0,22.0]],
+  caspian:[[49.0,37.5],[53.0,36.8],[54.0,37.4],[53.5,40.5],[52.5,42.0],[51.0,44.5],[49.0,45.0],[47.5,43.0],[49.0,41.0],[48.8,39.0]]
+};
+const RIVERS = [
+  { name:'الفرات', pts:[[38.0,36.8],[38.3,36.1],[39.0,35.9],[39.6,35.5],[40.2,34.8],[41.0,34.2],[41.8,33.5],[44.0,32.5],[45.5,31.0]] },
+  { name:'دجلة', pts:[[41.2,37.0],[41.8,36.2],[42.5,35.5],[43.5,34.2],[44.4,33.3],[46.0,31.5],[47.5,30.0]] },
+  { name:'العاصي', pts:[[36.4,36.9],[36.3,36.2],[36.7,35.6],[36.6,35.2],[35.9,34.6]] },
+  { name:'النيل', pts:[[32.5,31.5],[31.2,30.1],[30.8,28.5],[32.5,25.0],[32.9,22.0],[31.5,21.0]] }
+];
+const CITIES = [
+  ['دمشق',36.29,33.51,'c'],['حلب',37.16,36.20,'c'],['حمص',36.72,34.73,'s'],['حماة',36.76,35.13,'s'],['اللاذقية',35.78,35.52,'s'],
+  ['طرطوس',35.89,34.89,'s'],['إدلب',36.63,35.93,'s'],['درعا',36.10,32.62,'s'],['الرقة',39.01,35.95,'s'],['دير الزور',40.14,35.33,'s'],
+  ['الحسكة',40.75,36.50,'s'],['القامشلي',41.22,37.05,'s'],['تدمر',38.27,34.56,'s'],['السويداء',36.57,32.71,'s'],['القنيطرة',35.82,33.13,'s'],
+  ['رأس العين',40.07,36.85,'s'],['منبج',37.95,36.53,'s'],['الباب',37.45,36.37,'s'],['القصير',36.5,34.5,'s'],['جسر الشغور',36.32,35.81,'s'],
+  ['بيروت',35.50,33.89,'c'],['طرابلس',35.83,34.44,'s'],['صيدا',35.37,33.56,'s'],['صور',35.19,33.27,'s'],['عمّان',35.93,31.95,'c'],
+  ['إربد',35.85,32.55,'s'],['العقبة',35.00,29.53,'s'],['بغداد',44.36,33.31,'c'],['الموصل',43.13,36.34,'s'],['البصرة',47.78,30.51,'s'],
+  ['كركوك',44.39,35.47,'s'],['أربيل',44.01,36.19,'s'],['أنقرة',32.85,39.93,'c'],['إسطنبول',28.98,41.01,'c'],['غازي عنتاب',37.38,37.07,'s'],
+  ['أنطاكيا',36.16,36.20,'s'],['إسكندرونة',36.17,36.59,'s'],['كيليس',37.12,36.72,'s'],['ديار بكر',40.23,37.91,'s'],['وان',43.38,38.50,'s'],
+  ['طهران',51.39,35.69,'c'],['تبريز',46.29,38.08,'s'],['القدس',35.22,31.77,'c'],['تل أبيب',34.78,32.09,'s'],['حيفا',34.99,32.79,'s'],
+  ['غزة',34.45,31.50,'s'],['القاهرة',31.24,30.04,'c'],['الإسكندرية',29.92,31.20,'s'],['بورسعيد',32.30,31.26,'s'],['السويس',32.55,29.97,'s'],
+  ['الرياض',46.68,24.71,'c'],['جدة',39.19,21.49,'s'],['الدمام',50.10,26.43,'s'],['المدينة',39.61,24.47,'s'],['الكويت',47.98,29.37,'c'],
+  ['الدوحة',51.53,25.29,'c'],['أبوظبي',54.37,24.45,'c'],['دبي',55.27,25.20,'s'],['مسقط',58.41,23.61,'c'],['نيقوسيا',33.38,35.19,'c'],
+  ['مكة',39.83,21.39,'s'],['صنعاء',44.19,15.37,'c']
+];
+let G = null;
+/* ================= المحرك ================= */
+const FNAME = ['regime','opp','qsd','isis','purple'];
+const FID = { regime:0, opp:1, qsd:2, isis:3, purple:4 };
+const BASE_PROD = 0.25;      // إنتاج أساسي للمنطقة/ثانية
+const BASE_SPEED = 0.2;      // تقدم الرتل على الطريق (نسبة الطول/ثانية)
+const BASE_REGION_BASE = { regime:6, opp:3, qsd:12, isis:13 };
+const EAST = [11,12,13,14];  // المناطق الشرقية (تتأثر بعاصفة البادية)
+const SKINS = [
+  { id:'std',  name:'قياسي',              price:0,   desc:'دوائر عسكرية واضحة' },
+  { id:'t90',  name:'دبابات T-90',        price:120, desc:'هيكل وبرج ومدفع' },
+  { id:'suv',  name:'دفع رباعي تكتيكي',   price:120, desc:'عربات سريعة مدرعة' },
+  { id:'neon', name:'أسراب نيون',         price:120, desc:'أسراب متوهجة' }
+];
+const LEADERS = [
+  { id:0, name:'القائد الميداني',   cost:200, bonus:'إنتاج أسرع +20%' },
+  { id:1, name:'المهندس العسكري',   cost:400, bonus:'تحصين دفاعي +15%' },
+  { id:2, name:'مُنسّق الاتصالات',  cost:600, bonus:'تقليل تهدئة القدرات -20%' },
+  { id:3, name:'قائد الحرب الخاطفة',cost:800, bonus:'سرعة الأرتال +20% وهجوم +10%' }
+];
+const MODES = {
+  classic:{ name:'المعركة الكلاسيكية', dur:300 },
+  unknown:{ name:'الاجتياح المجهول',   dur:300 },
+  pockets:{ name:'الجيوب المعزولة',    dur:360 }
+};
+
+let ADJ = [];
+function buildAdj(){
+  ADJ = REGION_DEFS.map(() => []);
+  ROADS.forEach(r => { ADJ[r[0]].push({ to:r[1], t:r[2] }); ADJ[r[1]].push({ to:r[0], t:r[2] }); });
+}
+function roadType(a, b){
+  for (const r of ROADS) if ((r[0]===a && r[1]===b) || (r[0]===b && r[1]===a)) return r[2];
+  return 'r';
+}
+function isAdj(a, b){ return ADJ[a].some(e => e.to === b); }
+function rnd(a, b){ return a + Math.random() * (b - a); }
+function centroid(pts){
+  let sx=0, sy=0; pts.forEach(p => { sx+=p.x; sy+=p.y; });
+  return { x: sx/pts.length, y: sy/pts.length };
+}
+
+function prodMult(owner){
+  const f = FACTIONS[FNAME[owner]];
+  let m = 1 + (f ? f.prod : 0);
+  if (owner === G.pf && G.leader === 0) m += 0.20;
+  if (countOf(owner) >= 6) m *= 0.75;   // ضريبة التمدد
+  return m;
+}
+function defMult(owner){
+  if (owner < 0) return 1;
+  const f = FACTIONS[FNAME[owner]];
+  let m = 1 + (f ? f.def : 0);
+  if (owner === G.pf && G.leader === 1) m += 0.15;
+  return Math.max(0.5, m);
+}
+function atkMult(owner){
+  const f = FACTIONS[FNAME[owner]];
+  let m = 1 + (f ? f.atk : 0);
+  if (owner === G.pf && G.leader === 3) m += 0.10;
+  return m;
+}
+function speedMult(owner){
+  const f = FACTIONS[FNAME[owner]];
+  let m = 1 + (f ? f.spd : 0);
+  if (owner === G.pf && G.leader === 3) m += 0.20;
+  return m;
+}
+function countOf(owner){ let n=0; for (const r of G.regs) if (r.owner === owner) n++; return n; }
+function troopsOf(owner){ let n=0; for (const r of G.regs) if (r.owner === owner) n += r.troops; return n; }
+function aliveFactions(){ const s=[]; for (let i=0;i<5;i++) if (countOf(i)>0) s.push(i); return s; }
+
+/* BFS: مسار عبر مناطق مملوكة للفصيل فقط، والوجهة قد تكون عدوة */
+function findPath(owner, src, dst){
+  if (src === dst) return null;
+  const prev = new Array(REGION_DEFS.length).fill(-2);
+  prev[src] = -1;
+  const q = [src];
+  while (q.length){
+    const u = q.shift();
+    for (const e of ADJ[u]){
+      const v = e.to;
+      if (prev[v] !== -2) continue;
+      if (v === dst){
+        prev[v] = u;
+        const path = [dst];
+        let c = u;
+        while (c !== -1){ path.unshift(c); c = prev[c]; }
+        return path;
+      }
+      if (G.regs[v].owner === owner){ prev[v] = u; q.push(v); }
+    }
+  }
+  return null;
+}
+
+function newGame(mode, pf, opts){
+  buildAdj();
+  const pfKey = FNAME[pf];
+  const regs = REGION_DEFS.map(d => {
+    const pts = d.poly.map(p => proj(p[0], p[1]));
+    const lab = proj(d.lab[0], d.lab[1]);
+    return { id:d.id, name:d.name, owner:d.owner, troops:d.troops, poly:pts, c:centroid(pts), lab:lab, flash:0, shake:0 };
+  });
+  if (mode === 'pockets'){
+    const chosen = [pfKey];
+    for (const k of ['regime','opp','qsd','isis']) if (chosen.length < 3 && k !== pfKey) chosen.push(k);
+    regs.forEach(r => { r.owner = -1; r.troops = 12; });
+    chosen.forEach(k => {
+      const r = regs[BASE_REGION_BASE[k]];
+      r.owner = FID[k]; r.troops = 60;
+    });
+  }
+  G = {
+    mode:mode, pf:pf, regs:regs, convoys:[], fx:[], planes:[],
+    time:0, duration:MODES[mode].dur, over:false, selected:-1, pct:0.75,
+    cdSup:0, cdStr:0, cdSupMax:22, cdStrMax:35,
+    jamUntil:0, stormUntil:0, nextStorm:rnd(55,80), nextJam:rnd(70,100),
+    reveal:new Array(REGION_DEFS.length).fill(0),
+    rally:0, supT:10, botT:[0,0,0,0,0], purpleDone:0,
+    leader: opts && opts.leader !== undefined ? opts.leader : -1,
+    captures:0, sent:0, abil:0, fights:0, sideEvents:0,
+    scoreFlash:0, lastBattleMsg:''
+  };
+  if (G.leader < 0) G.leader = -1;
+  if (opts && opts.bonus){ regs.forEach(r => { if (r.owner === pf) r.troops = Math.round(r.troops*1.2); }); }
+  G.botT = [rnd(1,3), rnd(1,3), rnd(1,3), rnd(1,3), 0];
+  G.purpleNext = mode === 'unknown' ? 30 : -1;
+  return G;
+}
+
+function addText(x, y, s, color){ G.fx.push({ k:'txt', x:x, y:y, s:s, c:color || '#fff', t:0, life:1.6 }); }
+function addBoom(x, y, color, size){
+  G.fx.push({ k:'ring', x:x, y:y, c:color, t:0, life:0.8, r:size || 1 });
+  for (let i=0;i<14;i++){
+    const a = Math.random()*Math.PI*2, s = rnd(0.5,2.2);
+    G.fx.push({ k:'p', x:x, y:y, vx:Math.cos(a)*s, vy:Math.sin(a)*s, c:color, t:0, life:rnd(0.5,1.0) });
+  }
+}
+function addSpark(x, y){
+  for (let i=0;i<10;i++){
+    const a = Math.random()*Math.PI*2, s = rnd(0.8,2.6);
+    G.fx.push({ k:'p', x:x, y:y, vx:Math.cos(a)*s, vy:Math.sin(a)*s, c:'#ffd54f', t:0, life:rnd(0.3,0.7) });
+  }
+}
+
+function resolveBattle(r, attacker, A){
+  const effA = A * atkMult(attacker);
+  const dm = defMult(r.owner);
+  const effD = r.owner >= 0 ? r.troops * dm : r.troops;
+  const aName = FACTIONS[FNAME[attacker]].name;
+  if (effA > effD){
+    const remaining = (effA - effD) / atkMult(attacker);
+    const old = r.owner;
+    r.owner = attacker;
+    r.troops = Math.max(1, remaining);
+    r.flash = 1;
+    if (attacker === G.pf) G.captures++;
+    addBoom(r.c.x, r.c.y, FACTIONS[FNAME[attacker]].color, 1.6);
+    if (r.owner === G.pf) addText(r.c.x, r.c.y, 'سيطرة: ' + r.name, '#fff');
+    if (old === G.pf) G.lastBattleMsg = 'خسرت ' + r.name;
+    if (attacker === G.pf) Sound.capture();
+  } else {
+    const remaining = (effD - effA) / Math.max(0.5, dm);
+    r.troops = Math.max(1, remaining);
+    addBoom(r.c.x, r.c.y, '#ffffff', 0.9);
+    if (r.owner === G.pf) Sound.boom(0.5);
+  }
+}
+
+function spawnConvoy(owner, path, troops){
+  const c = {
+    id: Math.random().toString(36).slice(2), owner:owner, path:path, seg:0, t:0,
+    troops:troops, clashCd:0, skin:(owner===G.pf ? G.skin : 'std'), dead:false, ghost:0
+  };
+  G.convoys.push(c);
+  return c;
+}
+function sendConvoy(owner, src, dst, amount){
+  const path = findPath(owner, src, dst);
+  if (!path) return null;
+  const r = G.regs[src];
+  const amt = Math.min(Math.floor(amount), Math.floor(r.troops) - 1);
+  if (amt < 1) return null;
+  r.troops -= amt;
+  return spawnConvoy(owner, path, amt);
+}
+
+function convoyPos(c){
+  const a = G.regs[c.path[c.seg]].c;
+  const b = G.regs[c.path[c.seg+1]].c;
+  return { x: a.x + (b.x-a.x)*c.t, y: a.y + (b.y-a.y)*c.t };
+}
+
+function arriveAt(c, node){
+  const r = G.regs[node];
+  if (r.owner === c.owner){
+    r.troops += c.troops;
+    r.flash = 0.6;
+    if (c.owner === G.pf) addText(r.c.x, r.c.y, '+' + Math.round(c.troops) + ' تعزيز', '#9ef');
+  } else {
+    resolveBattle(r, c.owner, c.troops);
+  }
+  c.dead = true;
+}
+
+function moveConvoys(dt){
+  for (const c of G.convoys){
+    if (c.dead) continue;
+    if (c.seg >= c.path.length - 1){ arriveAt(c, c.path[c.path.length-1]); continue; }
+    const a = c.path[c.seg], b = c.path[c.seg+1];
+    const rt = roadType(a, b);
+    const roadMul = rt === 'm' ? 1.5 : rt === 'd' ? 0.8 : 1.0;
+    let storm = 1;
+    if (G.time < G.stormUntil && (EAST.includes(a) || EAST.includes(b))) storm = 0.5;
+    const v = BASE_SPEED * roadMul * speedMult(c.owner) * storm;
+    c.t += v * dt;
+    if (c.t >= 1){
+      c.t = 0;
+      c.seg++;
+      const node = c.path[c.seg];
+      if (c.seg >= c.path.length - 1){ arriveAt(c, node); }
+      else if (G.regs[node].owner !== c.owner){ arriveAt(c, node); }
+    }
+  }
+  G.convoys = G.convoys.filter(c => !c.dead && c.troops > 0.5);
+}
+
+/* اشتباك على الطريق: رتلان معاديان على نفس الطريق يتقاطعان */
+function midRoadCombat(dt){
+  const cs = G.convoys;
+  for (let i=0;i<cs.length;i++){
+    const A = cs[i];
+    if (A.dead) continue;
+    A.clashCd = Math.max(0, A.clashCd - dt);
+    if (A.seg >= A.path.length - 1) continue;
+    for (let j=i+1;j<cs.length;j++){
+      const B = cs[j];
+      if (B.dead || B.owner === A.owner || B.seg >= B.path.length - 1) continue;
+      if (A.clashCd > 0 || B.clashCd > 0) continue;
+      const a0 = A.path[A.seg], a1 = A.path[A.seg+1];
+      const b0 = B.path[B.seg], b1 = B.path[B.seg+1];
+      const sameEdge = (a0===b0 && a1===b1) || (a0===b1 && a1===b0);
+      if (!sameEdge) continue;
+      const sA = a0 === Math.min(a0,a1) ? A.t : 1 - A.t;
+      const sB = b0 === Math.min(b0,b1) ? B.t : 1 - B.t;
+      if (Math.abs(sA - sB) < 0.035){
+        const lossA = B.troops * 0.6, lossB = A.troops * 0.6;
+        A.troops -= lossA; B.troops -= lossB;
+        A.clashCd = 1.5; B.clashCd = 1.5;
+        G.fights++;
+        const p = convoyPos(A);
+        addSpark(p.x, p.y);
+        addText(p.x, p.y, '⚔️ اشتباك!', '#ffab40');
+        Sound.clash();
+        if (A.troops <= 0.5) A.dead = true;
+        if (B.troops <= 0.5) B.dead = true;
+      }
+    }
+  }
+  G.convoys = G.convoys.filter(c => !c.dead && c.troops > 0.5);
+}
+
+function updateIsolation(dt){
+  for (const r of G.regs){
+    r.iso = false;
+    if (r.owner < 0 || countOf(r.owner) < 2) continue;
+    const hasFriend = ADJ[r.id].some(e => G.regs[e.to].owner === r.owner);
+    if (!hasFriend){
+      r.iso = true;
+      r.troops = Math.max(1, r.troops - 1.2 * dt);
+    }
+  }
+}
+
+function applyProduction(dt){
+  for (const r of G.regs){
+    if (r.owner >= 0) r.troops += BASE_PROD * prodMult(r.owner) * dt;
+    if (r.flash > 0) r.flash = Math.max(0, r.flash - dt);
+  }
+}
+
+function supportRanking(){
+  const alive = aliveFactions().filter(f => f !== undefined);
+  const score = f => countOf(f) * 1000 + troopsOf(f);
+  return alive.slice().sort((a,b) => score(b) - score(a));
+}
+const SUPPORT_BY_RANK = [20, 45, 65, 85];
+function applySupport(){
+  const rank = supportRanking();
+  rank.forEach((f, idx) => {
+    const amt = SUPPORT_BY_RANK[Math.min(idx, 3)];
+    let target = null;
+    const base = BASE_REGION_BASE[FNAME[f]];
+    if (base !== undefined && G.regs[base].owner === f) target = G.regs[base];
+    if (!target){
+      let best = null;
+      for (const r of G.regs) if (r.owner === f && (!best || r.troops < best.troops)) best = r;
+      target = best;
+    }
+    if (!target) return;
+    if (f === 2){
+      G.planes.push({ k:'air', fx:-1, fy:-1, tx:target.c.x, ty:target.c.y, t:0, dur:3.2, owner:f, amt:amt, reg:target.id });
+    } else {
+      target.troops += amt;
+      target.flash = 0.8;
+      if (f === G.pf || f === 0 || f === 3) addText(target.c.x, target.c.y - 0.05, '+' + amt + ' دعم', FACTIONS[FNAME[f]].color);
+    }
+  });
+}
+
+function botAct(f){
+  const isPurple = f === 4;
+  const leader = supportRanking()[0];
+  let best = null, bestScore = -1, bestSrc = -1;
+  for (const src of G.regs){
+    if (src.owner !== f || src.troops < 18) continue;
+    for (const e of ADJ[src.id]){
+      const dst = G.regs[e.to];
+      if (dst.owner === f) continue;
+      let s = 1 / (dst.troops + 10);
+      if (dst.owner === leader && leader !== f) s *= (G.time < G.rally ? 6 : 3.5);
+      if (dst.owner === -1) s *= 1.2;
+      if (isPurple) s *= 1.3;
+      if (s > bestScore){ bestScore = s; best = dst; bestSrc = src; }
+    }
+  }
+  if (best){
+    sendConvoy(f, bestSrc.id, best.id, bestSrc.troops * (isPurple ? 0.75 : 0.65));
+    return;
+  }
+  for (const src of G.regs){
+    if (src.owner !== f || src.troops < 60) continue;
+    for (const e of ADJ[src.id]){
+      const dst = G.regs[e.to];
+      if (dst.owner === f && dst.troops < src.troops * 0.5){
+        sendConvoy(f, src.id, dst.id, src.troops * 0.4);
+        return;
+      }
+    }
+  }
+}
+
+function spawnPurple(){
+  let pick = null;
+  for (const r of G.regs){
+    if (r.owner === G.pf || r.owner === 4) continue;
+    if (!pick || r.troops < pick.troops) pick = r;
+  }
+  if (!pick) return;
+  pick.owner = 4; pick.troops = 40; pick.flash = 1;
+  addBoom(pick.c.x, pick.c.y, '#8e24aa', 2);
+  addText(pick.c.x, pick.c.y, '🌐 ظهور الغزاة', '#d18cff');
+  Sound.chime();
+  G.purpleDone++;
+}
+
+function updateBots(dt){
+  for (let f = 0; f < 5; f++){
+    if (f === G.pf) continue;
+    if (f === 4 && G.purpleDone === 0) continue;
+    if (countOf(f) === 0) continue;
+    G.botT[f] -= dt;
+    if (G.botT[f] <= 0){
+      botAct(f);
+      G.botT[f] = (f === 4 ? rnd(1.6,2.4) : rnd(2.4,3.6));
+    }
+  }
+}
+
+function updatePlanes(dt){
+  for (const p of G.planes){
+    p.t += dt;
+    if (p.k === 'air' && p.t >= p.dur && !p.done){
+      p.done = true;
+      const r = G.regs[p.reg];
+      if (r.owner === p.owner){ r.troops += p.amt; r.flash = 1; }
+      addText(r.c.x, r.c.y, '🪂 +' + p.amt, '#7ee787');
+      for (let i=0;i<4;i++) addText(r.c.x + rnd(-0.12,0.12), r.c.y + rnd(-0.12,0.12) - 0.1, '🪂', '#fff');
+    }
+    if (p.k === 'strike' && p.t >= p.dur && !p.done){
+      p.done = true;
+      const r = G.regs[p.reg];
+      const lost = r.troops * 0.35;
+      r.troops = Math.max(1, r.troops - lost);
+      addBoom(r.c.x, r.c.y, '#ff7043', 2.2);
+      G.shake = 0.5;
+      Sound.boom(1);
+      addText(r.c.x, r.c.y, '-' + Math.round(lost), '#ff8a80');
+    }
+  }
+  G.planes = G.planes.filter(p => !p.done || p.t < p.dur + 0.5);
+}
+
+function updateFx(dt){
+  for (const f of G.fx){
+    f.t += dt;
+    if (f.k === 'p'){ f.x += f.vx * dt * 0.3; f.y += f.vy * dt * 0.3; }
+  }
+  G.fx = G.fx.filter(f => f.t < f.life);
+  if (G.shake) G.shake = Math.max(0, G.shake - dt);
+}
+
+function updateEvents(dt){
+  if (G.time >= G.nextStorm){
+    G.stormUntil = G.time + 15;
+    G.nextStorm = G.time + rnd(70, 110);
+    Sound.wind();
+    G.onEvent && G.onEvent('🌪️ عاصفة البادية الرملية — الأرتال بطيئة والشرق مخفي');
+  }
+  if (G.time >= G.nextJam){
+    G.jamUntil = G.time + 10;
+    G.nextJam = G.time + rnd(80, 120);
+    G.onEvent && G.onEvent('📡 قطع الاتصالات — أوامر الهجوم متوقفة لمدة 10 ثوانٍ');
+  }
+  if (G.purpleNext >= 0 && G.time >= G.purpleNext){
+    spawnPurple();
+    G.purpleNext = G.purpleDone >= 2 ? -1 : 150;
+  }
+}
+
+function checkEnd(){
+  const pfCount = countOf(G.pf);
+  const total = G.regs.length;
+  let reason = null;
+  if (pfCount === 0) reason = 'lose';
+  else if (pfCount === total) reason = 'win';
+  else if (G.time >= G.duration) reason = 'time';
+  if (!reason) return;
+  G.over = true;
+  const rank = [0,1,2,3,4].filter(f => countOf(f) > 0 || f === G.pf)
+    .sort((a,b) => (countOf(b)-countOf(a)) || (troopsOf(b)-troopsOf(a)));
+  let win = false;
+  if (reason === 'win') win = true;
+  else if (reason === 'time') win = rank[0] === G.pf;
+  G.result = { reason:reason, win:win, rank:rank };
+}
+
+function engineStep(dt){
+  if (!G || G.over) return;
+  G.time += dt;
+  applyProduction(dt);
+  updateIsolation(dt);
+  G.supT -= dt;
+  if (G.supT <= 0){ G.supT = 10; applySupport(); }
+  updateBots(dt);
+  moveConvoys(dt);
+  midRoadCombat(dt);
+  updatePlanes(dt);
+  updateEvents(dt);
+  updateFx(dt);
+  G.cdSup = Math.max(0, G.cdSup - dt);
+  G.cdStr = Math.max(0, G.cdStr - dt);
+  for (const f of [0,1,2,3,4]){
+    if (countOf(f) === 0 && f !== G.pf && G.convoys.some(c => c.owner === f)){
+      G.convoys = G.convoys.filter(c => c.owner !== f);
+    }
+  }
+  checkEnd();
+}
+/* ================= الرسم والكاميرا ================= */
+const canvas = document.getElementById('mapCanvas');
+const ctx = canvas.getContext('2d');
+let W = 300, H = 300, DPR = 1;
+const cam = { cx: 10, cy: 8, s: 60 };
+const WORLD = { w: MAP.worldW, h: MAP.worldH };
+const ANIM = { shakeX:0, shakeY:0, sand:[] };
+for (let i=0;i<140;i++) ANIM.sand.push({ x:Math.random(), y:Math.random(), v:rnd(0.3,0.9) });
+const NUDGE = { 6:[-6,-6], 8:[-12,12], 9:[-8,-16], 10:[0,10], 7:[10,0] };
+
+function minScale(){ return Math.min(W / WORLD.w, H / WORLD.h) * 0.95; }
+function clampCam(){
+  cam.s = Math.min(200, Math.max(minScale(), cam.s));
+  const hw = W / 2 / cam.s, hh = H / 2 / cam.s;
+  if (hw * 2 >= WORLD.w) cam.cx = WORLD.w / 2; else cam.cx = Math.min(WORLD.w - hw, Math.max(hw, cam.cx));
+  if (hh * 2 >= WORLD.h) cam.cy = WORLD.h / 2; else cam.cy = Math.min(WORLD.h - hh, Math.max(hh, cam.cy));
+}
+function fitSyria(){
+  const c = proj(38.9, 35.0);
+  cam.cx = c.x; cam.cy = c.y;
+  cam.s = Math.min(W / 7.4, H / 6.2);
+  clampCam();
+}
+function fitWorld(){
+  cam.cx = WORLD.w / 2; cam.cy = WORLD.h / 2;
+  cam.s = minScale();
+  clampCam();
+}
+function resizeCanvas(){
+  const wrap = canvas.parentElement;
+  const r = wrap.getBoundingClientRect();
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = Math.max(50, Math.floor(r.width));
+  H = Math.max(50, Math.floor(r.height));
+  canvas.width = Math.round(W * DPR);
+  canvas.height = Math.round(H * DPR);
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  clampCam();
+}
+function toS(x, y){
+  return { x: (x - cam.cx) * cam.s + W / 2 + ANIM.shakeX, y: (y - cam.cy) * cam.s + H / 2 + ANIM.shakeY };
+}
+function toW(sx, sy){
+  return { x: (sx - W / 2) / cam.s + cam.cx, y: (sy - H / 2) / cam.s + cam.cy };
+}
+function setWorld(){
+  ctx.setTransform(DPR * cam.s, 0, 0, DPR * cam.s,
+    DPR * ((W / 2 + ANIM.shakeX) - cam.cx * cam.s),
+    DPR * ((H / 2 + ANIM.shakeY) - cam.cy * cam.s));
+}
+function setScreen(){ ctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+function wpx(px){ return px / cam.s; }
+
+function pathPoly(pts, closed){
+  ctx.beginPath();
+  pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+  if (closed) ctx.closePath();
+}
+
+function regionAt(sx, sy){
+  const w = toW(sx, sy);
+  for (const r of G.regs){
+    let inside = false;
+    const pts = r.poly;
+    for (let i=0, j=pts.length-1; i<pts.length; j=i++){
+      const xi=pts[i].x, yi=pts[i].y, xj=pts[j].x, yj=pts[j].y;
+      if (((yi > w.y) !== (yj > w.y)) && (w.x < (xj - xi) * (w.y - yi) / (yj - yi) + xi)) inside = !inside;
+    }
+    if (inside) return r.id;
+  }
+  let best = -1, bd = 1e9;
+  for (const r of G.regs){
+    const p = toS(r.c.x, r.c.y);
+    const d = Math.hypot(p.x - sx, p.y - sy);
+    if (d < bd){ bd = d; best = r.id; }
+  }
+  return bd < 42 ? best : -1;
+}
+
+function drawLand(){
+  setWorld();
+  for (const k of Object.keys(COUNTRIES)){
+    const pts = projPoly(COUNTRIES[k]);
+    pathPoly(pts, true);
+    ctx.fillStyle = k === 'caspian' ? '#0b2a45' : '#15261d';
+    ctx.shadowColor = k === 'caspian' ? 'rgba(79,195,247,.5)' : 'rgba(79,195,247,.45)';
+    ctx.shadowBlur = 14;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.lineWidth = wpx(1.2);
+    ctx.strokeStyle = k === 'caspian' ? '#4fc3f7' : 'rgba(120,170,140,.55)';
+    ctx.stroke();
+  }
+  // Shallow-sea depth glow on the Levant coastline
+  ctx.lineWidth = wpx(10);
+  ctx.strokeStyle = 'rgba(79,195,247,.10)';
+  pathPoly(projPoly([[35.7,35.8],[35.8,35.2],[35.7,34.8],[35.2,33.8],[35.0,32.8],[34.8,31.5]]), false);
+  ctx.stroke();
+}
+
+function drawRivers(){
+  setWorld();
+  for (const rv of RIVERS){
+    pathPoly(projPoly(rv.pts), false);
+    ctx.lineCap = 'round';
+    ctx.shadowColor = '#4fc3f7';
+    ctx.shadowBlur = 10;
+    ctx.strokeStyle = '#64c8ff';
+    ctx.lineWidth = wpx(2.2);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+}
+
+function regionFill(owner){
+  if (owner < 0) return 'rgba(120,130,150,0.22)';
+  return 'rgba(' + FACTIONS[FNAME[owner]].rgb + ',0.5)';
+}
+function drawRegions(){
+  setWorld();
+  for (const r of G.regs){
+    pathPoly(r.poly, true);
+    ctx.fillStyle = regionFill(r.owner);
+    if (r.flash > 0){ ctx.fillStyle = 'rgba(255,255,255,' + (0.3 * r.flash).toFixed(2) + ')'; }
+    ctx.fill();
+    ctx.lineWidth = wpx(r.owner === G.pf ? 2 : 1);
+    ctx.strokeStyle = r.owner === G.pf ? 'rgba(255,255,255,.8)' : 'rgba(255,255,255,.28)';
+    ctx.stroke();
+    if (G.selected === r.id){
+      ctx.lineWidth = wpx(3);
+      ctx.strokeStyle = '#f5c542';
+      ctx.setLineDash([wpx(6), wpx(4)]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    if (r.iso){
+      ctx.lineWidth = wpx(2);
+      ctx.strokeStyle = '#ffab40';
+      ctx.setLineDash([wpx(3), wpx(3)]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+}
+
+function drawRoads(){
+  setWorld();
+  ctx.lineCap = 'round';
+  for (const rd of ROADS){
+    const a = G.regs[rd[0]].c, b = G.regs[rd[1]].c;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+    if (rd[2] === 'm'){
+      ctx.setLineDash([]);
+      ctx.strokeStyle = 'rgba(255,202,40,.85)';
+      ctx.lineWidth = wpx(3);
+      ctx.shadowColor = '#ffca28'; ctx.shadowBlur = 6;
+    } else if (rd[2] === 'd'){
+      ctx.setLineDash([wpx(2), wpx(3)]);
+      ctx.strokeStyle = 'rgba(215,185,122,.6)';
+      ctx.lineWidth = wpx(1.6);
+      ctx.shadowBlur = 0;
+    } else {
+      ctx.setLineDash([]);
+      ctx.strokeStyle = 'rgba(210,225,255,.35)';
+      ctx.lineWidth = wpx(1.3);
+      ctx.shadowBlur = 0;
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.setLineDash([]);
+  }
+}
+
+function drawFrontlines(now){
+  setWorld();
+  const pulse = 0.55 + 0.45 * Math.sin(now * 3.2);
+  for (const rd of ROADS){
+    const A = G.regs[rd[0]], B = G.regs[rd[1]];
+    if (A.owner < 0 || B.owner < 0 || A.owner === B.owner) continue;
+    ctx.beginPath(); ctx.moveTo(A.c.x, A.c.y); ctx.lineTo(B.c.x, B.c.y);
+    ctx.strokeStyle = 'rgba(255,82,82,' + pulse.toFixed(2) + ')';
+    ctx.lineWidth = wpx(3.2);
+    ctx.shadowColor = '#ff1744';
+    ctx.shadowBlur = 16;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+}
+
+function drawCountryNames(){
+  setScreen();
+  const names = [['تركيا',33.0,38.8],['العراق',43.6,33.3],['إيران',52.0,33.3],['الأردن',36.9,30.9],['لبنان',35.8,34.2],
+    ['فلسطين',34.9,31.9],['مصر',29.5,26.5],['السعودية',44.8,24.0],['قبرص',33.2,35.1],['الخليج العربي',50.8,27.0],['البحر المتوسط',30.4,34.0],['البحر الأحمر',38.6,24.6],['بحر قزوين',50.8,40.5]];
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const n of names){
+    const p = toS(proj(n[1], n[2]).x, proj(n[1], n[2]).y);
+    if (p.x < -40 || p.x > W + 40 || p.y < -20 || p.y > H + 20) continue;
+    ctx.font = 'italic ' + (n[0].length > 8 ? 9 : 11) + 'px sans-serif';
+    ctx.fillStyle = n[0].indexOf('بحر') >= 0 || n[0].indexOf('الخليج') >= 0 ? 'rgba(120,190,240,.55)' : 'rgba(200,215,230,.42)';
+    ctx.fillText(n[0], p.x, p.y);
+  }
+}
+
+function drawCities(){
+  setScreen();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  for (const c of CITIES){
+    const pr = proj(c[1], c[2]);
+    const p = toS(pr.x, pr.y);
+    if (p.x < -30 || p.x > W + 30 || p.y < -30 || p.y > H + 30) continue;
+    const big = c[3] === 'c';
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, big ? 3 : 2, 0, Math.PI * 2);
+    ctx.fillStyle = big ? '#ffe082' : '#cfd8dc';
+    ctx.fill();
+    if (big || cam.s > 95){
+      ctx.font = (big ? 'bold ' : '') + (cam.s > 95 ? 10 : 9) + 'px sans-serif';
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(5,10,18,.85)';
+      ctx.strokeText(c[0], p.x, p.y - 4);
+      ctx.fillStyle = big ? '#fff3c4' : '#d6dee6';
+      ctx.fillText(c[0], p.x, p.y - 4);
+    }
+  }
+}
+
+function drawRegionLabels(now){
+  setScreen();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const fs = Math.max(10, Math.min(13, cam.s / 8.5));
+  for (const r of G.regs){
+    const p0 = toS(r.lab.x, r.lab.y);
+    const nud = NUDGE[r.id] || [0, 0];
+    const p = { x: p0.x + nud[0], y: p0.y + nud[1] };
+    if (p.x < -60 || p.x > W + 60 || p.y < -40 || p.y > H + 40) continue;
+    const hidden = isHiddenCount(r);
+    ctx.font = 'bold ' + fs + 'px sans-serif';
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(0,0,0,.75)';
+    ctx.strokeText(r.name, p.x, p.y - fs * 0.6);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(r.name, p.x, p.y - fs * 0.6);
+    const txt = hidden ? '؟؟' : Math.round(r.troops) + '';
+    ctx.font = 'bold ' + (fs + 2) + 'px sans-serif';
+    ctx.strokeText(txt, p.x, p.y + fs * 0.8);
+    ctx.fillStyle = r.owner >= 0 ? FACTIONS[FNAME[r.owner]].color : '#cfd8dc';
+    if (r.owner === 2) ctx.fillStyle = '#fff176';
+    if (r.owner === 3) ctx.fillStyle = '#e0e0e0';
+    ctx.fillText(txt, p.x, p.y + fs * 0.8);
+    if (r.iso){
+      ctx.font = 'bold ' + Math.max(9, fs - 2) + 'px sans-serif';
+      ctx.fillStyle = '#ffab40';
+      ctx.fillText('⚠️ محاصرة', p.x, p.y + fs * 2.1);
+    }
+  }
+}
+
+function isHiddenCount(r){
+  if (r.owner === G.pf) return false;
+  if (G.time < G.reveal[r.id]) return false;
+  if (G.time < G.stormUntil && EAST.includes(r.id) && r.owner !== G.pf) return true;
+  if (!G.fogOn) return false;
+  if (r.owner < 0) return false;
+  const near = ADJ[r.id].some(e => G.regs[e.to].owner === G.pf) || G.regs[r.id].owner === G.pf;
+  return !near;
+}
+
+function supportInfo(f){
+  if (countOf(f) === 0) return { amt:0, dead:true, rank:-1 };
+  const rank = supportRanking().indexOf(f);
+  return { amt: SUPPORT_BY_RANK[Math.min(rank, 3)], dead:false, rank:rank };
+}
+
+const BADGES = [
+  { f:0, lon:35.55, lat:34.25, shortName:'حزب الله' },
+  { f:1, lon:33.4, lat:38.4, shortName:'تركيا' },
+  { f:2, lon:36.5, lat:30.9, shortName:'التحالف' },
+  { f:3, lon:42.7, lat:33.6, shortName:'الأنبار' }
+];
+function drawBadges(now){
+  setScreen();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const b of BADGES){
+    const pr = proj(b.lon, b.lat);
+    const p = toS(pr.x, pr.y);
+    if (p.x < -140 || p.x > W + 140 || p.y < -30 || p.y > H + 30) continue;
+    const info = supportInfo(b.f);
+    const col = FACTIONS[FNAME[b.f]].color;
+    const line1 = FACTIONS[FNAME[b.f]].ext.split(' ').slice(1).join(' ') || b.shortName;
+    const line2 = info.dead ? '(متوقف - خسر مناطقه)' : ('+' + info.amt + ' جندياً' + (info.rank === 0 ? ' 🎯' : ''));
+    ctx.font = 'bold 10px sans-serif';
+    const w1 = ctx.measureText(line1).width, w2 = ctx.measureText(line2).width;
+    const bw = Math.max(w1, w2) + 14, bh = 34;
+    ctx.fillStyle = 'rgba(8,14,24,.85)';
+    ctx.strokeStyle = info.dead ? '#757575' : col;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    if (ctx.roundRect){ ctx.roundRect(p.x - bw/2, p.y - bh/2, bw, bh, 7); }
+    else { ctx.rect(p.x - bw/2, p.y - bh/2, bw, bh); }
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = info.dead ? '#9e9e9e' : '#fff';
+    ctx.fillText(line1, p.x, p.y - 8);
+    ctx.fillStyle = info.dead ? '#9e9e9e' : col;
+    ctx.fillText(line2, p.x, p.y + 8);
+  }
+}
+
+function drawConvoys(now){
+  setScreen();
+  for (const c of G.convoys){
+    const a = G.regs[c.path[c.seg]].c, bb = G.regs[c.path[c.seg+1]].c;
+    const pw = convoyPos(c);
+    const p = toS(pw.x, pw.y);
+    const ang = Math.atan2(bb.y - a.y, bb.x - a.x);
+    const col = FACTIONS[FNAME[c.owner]].color;
+    const r = 7 + Math.min(9, Math.sqrt(c.troops) * 0.55);
+    const hideN = c.owner !== G.pf && G.fogOn && !(G.time < G.reveal[c.path[c.seg+1]]);
+    const label = hideN ? '؟' : Math.round(c.troops);
+    const skin = c.skin || 'std';
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    if (skin === 't90'){
+      ctx.rotate(ang);
+      ctx.fillStyle = '#2e3b2e'; ctx.fillRect(-r*1.25, -r*0.75, r*2.5, r*1.5);
+      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(0, 0, r*0.55, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, -r*0.12, r*1.4, r*0.24);
+      ctx.strokeStyle = '#111'; ctx.lineWidth = 1; ctx.strokeRect(-r*1.25, -r*0.75, r*2.5, r*1.5);
+    } else if (skin === 'suv'){
+      ctx.rotate(ang);
+      ctx.fillStyle = col; ctx.strokeStyle = '#111'; ctx.lineWidth = 1;
+      ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(-r*1.2, -r*0.62, r*2.4, r*1.24, 4); else ctx.rect(-r*1.2, -r*0.62, r*2.4, r*1.24);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#111';
+      [[-0.8,-0.7],[0.8,-0.7],[-0.8,0.7],[0.8,0.7]].forEach(q => { ctx.beginPath(); ctx.arc(q[0]*r, q[1]*r*0.8, r*0.22, 0, Math.PI*2); ctx.fill(); });
+      ctx.fillStyle = '#fff9c4'; ctx.fillRect(r*1.05, -r*0.4, r*0.15, r*0.25); ctx.fillRect(r*1.05, r*0.15, r*0.15, r*0.25);
+    } else if (skin === 'neon'){
+      ctx.shadowColor = col; ctx.shadowBlur = 14;
+      for (let i=0;i<6;i++){
+        const aa = now * 2.4 + i * Math.PI / 3;
+        ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(Math.cos(aa) * r * 0.7, Math.sin(aa) * r * 0.7, r * 0.3, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+    } else {
+      ctx.fillStyle = col; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+    ctx.restore();
+    ctx.font = 'bold ' + Math.max(9, Math.min(12, r * 0.9)) + 'px sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.85)';
+    const ty = skin === 'std' ? 0 : r * 1.1 + 6;
+    if (skin === 'std'){ ctx.strokeText(label, p.x, p.y); ctx.fillStyle = '#fff'; ctx.fillText(label, p.x, p.y); }
+    else { ctx.strokeText(label, p.x, p.y + ty); ctx.fillStyle = '#fff'; ctx.fillText(label, p.x, p.y + ty); }
+  }
+}
+
+function drawPlaneSprite(x, y, ang, sc, now, glow){
+  ctx.save();
+  ctx.translate(x, y); ctx.rotate(ang);
+  ctx.scale(sc, sc);
+  ctx.fillStyle = '#cfd8dc'; ctx.strokeStyle = '#37474f'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.ellipse(0, 0, 13, 3.4, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(2, 0); ctx.lineTo(-4, -13); ctx.lineTo(-7, -13); ctx.lineTo(-3, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(2, 0); ctx.lineTo(-4, 13); ctx.lineTo(-7, 13); ctx.lineTo(-3, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-10, 0); ctx.lineTo(-14, -6); ctx.lineTo(-15, -6); ctx.lineTo(-13, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  for (const ey of [-9, -4.5, 4.5, 9]){
+    ctx.fillStyle = '#90a4ae';
+    ctx.beginPath(); ctx.arc(-1, ey, 2.2, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.7)';
+    ctx.beginPath(); ctx.moveTo(-1 + Math.cos(now*30)*2.6, ey + Math.sin(now*30)*2.6); ctx.lineTo(-1 - Math.cos(now*30)*2.6, ey - Math.sin(now*30)*2.6); ctx.stroke();
+  }
+  if (glow){
+    const on = Math.sin(now * 6) > 0;
+    ctx.fillStyle = on ? '#ff5252' : 'rgba(255,82,82,.2)'; ctx.beginPath(); ctx.arc(0, -13, 1.6, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = on ? 'rgba(255,82,82,.2)' : '#69f0ae'; ctx.beginPath(); ctx.arc(0, 13, 1.6, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawPlanes(now){
+  for (const p of G.planes){
+    if (p.done) continue;
+    const prog = Math.min(1, p.t / p.dur);
+    let sx, sy, tx, ty;
+    if (p.k === 'air'){
+      sx = p.tx - 6; sy = p.ty - 3.5;
+    } else {
+      sx = p.fx; sy = p.fy;
+    }
+    tx = p.tx; ty = p.ty;
+    const gx = sx + (tx - sx) * prog, gy = sy + (ty - sy) * prog;
+    const g = toS(gx, gy);
+    const elev = p.k === 'air' ? 80 : 22;
+    const ang = Math.atan2(toS(tx,ty).y - toS(sx,sy).y, toS(tx,ty).x - toS(sx,sy).x);
+    ctx.save();
+    setScreen();
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    ctx.beginPath(); ctx.ellipse(g.x + 6, g.y + elev * 0.8, 14 * (p.k === 'air' ? 1 : 0.7), 5, 0, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+    if (p.k === 'air'){
+      p.trail = p.trail || [];
+      p.trail.push({ x: g.x, y: g.y - elev });
+      if (p.trail.length > 36) p.trail.shift();
+      setScreen();
+      ctx.lineWidth = 2; ctx.lineCap = 'round';
+      for (let i=1;i<p.trail.length;i++){
+        ctx.strokeStyle = 'rgba(255,255,255,' + (i / p.trail.length * 0.45).toFixed(3) + ')';
+        ctx.beginPath(); ctx.moveTo(p.trail[i-1].x, p.trail[i-1].y); ctx.lineTo(p.trail[i].x, p.trail[i].y); ctx.stroke();
+      }
+    }
+    setScreen();
+    drawPlaneSprite(g.x, g.y - elev, ang, p.k === 'air' ? 1.5 : 1.1, now, p.k === 'air');
+    if (p.k === 'air' && prog > 0.92 && !p.dropped){
+      p.dropped = true;
+      addText(tx, ty, '🪂', '#fff');
+    }
+  }
+}
+
+function drawFx(){
+  setScreen();
+  for (const f of G.fx){
+    const k = f.t / f.life;
+    if (f.k === 'ring'){
+      const p = toS(f.x, f.y);
+      ctx.strokeStyle = f.c;
+      ctx.globalAlpha = 1 - k;
+      ctx.lineWidth = 3 * (1 - k) + 1;
+      ctx.beginPath(); ctx.arc(p.x, p.y, (6 + k * 46) * f.r, 0, Math.PI*2); ctx.stroke();
+      ctx.globalAlpha = 1;
+    } else if (f.k === 'p'){
+      const p = toS(f.x, f.y);
+      ctx.globalAlpha = 1 - k;
+      ctx.fillStyle = f.c;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 2.2, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+    } else if (f.k === 'txt'){
+      const p = toS(f.x, f.y);
+      ctx.globalAlpha = Math.max(0, 1 - k);
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.85)';
+      ctx.strokeText(f.s, p.x, p.y - f.t * 26);
+      ctx.fillStyle = f.c;
+      ctx.fillText(f.s, p.x, p.y - f.t * 26);
+      ctx.globalAlpha = 1;
+    }
+  }
+}
+
+function drawStorm(now){
+  if (!G || G.time >= G.stormUntil) return;
+  setScreen();
+  const fade = Math.min(1, (G.stormUntil - G.time));
+  ctx.fillStyle = 'rgba(214,170,90,' + (0.12 * fade).toFixed(3) + ')';
+  ctx.fillRect(W * 0.35, 0, W * 0.65, H);
+  for (const s of ANIM.sand){
+    s.x += s.v * 0.004; if (s.x > 1.05) s.x = -0.05;
+    const x = W * s.x, y = H * ((s.y + now * 0.02 * s.v) % 1);
+    ctx.fillStyle = 'rgba(235,200,130,' + (0.5 * fade).toFixed(2) + ')';
+    ctx.fillRect(x, y, 2, 1.5);
+  }
+}
+
+function renderFrame(now){
+  setScreen();
+  const g = ctx.createRadialGradient(W * 0.5, H * 0.4, 20, W * 0.5, H * 0.5, Math.max(W, H) * 0.8);
+  g.addColorStop(0, '#16324f'); g.addColorStop(1, '#050a13');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  if (!G) return;
+  if (G.shake > 0){
+    ANIM.shakeX = (Math.random() - 0.5) * 10 * G.shake;
+    ANIM.shakeY = (Math.random() - 0.5) * 10 * G.shake;
+  } else { ANIM.shakeX = 0; ANIM.shakeY = 0; }
+  drawLand();
+  drawRivers();
+  drawRegions();
+  drawFrontlines(now);
+  drawRoads();
+  drawCountryNames();
+  drawCities();
+  drawRegionLabels(now);
+  drawBadges(now);
+  drawConvoys(now);
+  drawPlanes(now);
+  drawFx();
+  drawStorm(now);
+  setScreen();
+}
+/* ================= الصوت ================= */
+const Sound = (function(){
+  let ac = null, master = null, on = true;
+  try { on = localStorage.getItem('syria_ctrl_sound') !== '0'; } catch(e){}
+  function init(){
+    if (!ac){
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        ac = new AC();
+        master = ac.createGain(); master.gain.value = 0.22; master.connect(ac.destination);
+      } catch(e){ ac = null; }
+    }
+    if (ac && ac.state === 'suspended'){ try { ac.resume(); } catch(e){} }
+  }
+  function tone(f, d, type, vol, slideTo){
+    if (!on || !ac) return;
+    try {
+      const o = ac.createOscillator(), g = ac.createGain(), t0 = ac.currentTime;
+      o.type = type || 'sine';
+      o.frequency.setValueAtTime(f, t0);
+      if (slideTo) o.frequency.linearRampToValueAtTime(slideTo, t0 + d);
+      g.gain.setValueAtTime(vol || 0.2, t0);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + d);
+      o.connect(g); g.connect(master);
+      o.start(t0); o.stop(t0 + d + 0.05);
+    } catch(e){}
+  }
+  function noise(d, vol, freq){
+    if (!on || !ac) return;
+    try {
+      const len = Math.floor(ac.sampleRate * d);
+      const buf = ac.createBuffer(1, len, ac.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i=0;i<len;i++) data[i] = (Math.random()*2 - 1) * (1 - i/len);
+      const src = ac.createBufferSource(); src.buffer = buf;
+      const flt = ac.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = freq || 800;
+      const g = ac.createGain(); g.gain.value = vol || 0.3;
+      src.connect(flt); flt.connect(g); g.connect(master);
+      src.start();
+    } catch(e){}
+  }
+  return {
+    init: init,
+    isOn: function(){ return on; },
+    toggle: function(){ on = !on; try { localStorage.setItem('syria_ctrl_sound', on ? '1' : '0'); } catch(e){} return on; },
+    click: function(){ tone(660, 0.06, 'square', 0.06); },
+    move: function(){ tone(380, 0.12, 'triangle', 0.10, 520); },
+    clash: function(){ noise(0.25, 0.35, 1500); tone(900, 0.08, 'square', 0.05); },
+    boom: function(v){ noise(0.7, 0.5 * (v || 0.5), 220); },
+    capture: function(){ tone(523, 0.12, 'triangle', 0.18); setTimeout(function(){ tone(784, 0.2, 'triangle', 0.18); }, 120); },
+    chime: function(){ tone(880, 0.3, 'sine', 0.12); },
+    wind: function(){ noise(1.4, 0.12, 420); },
+    jet: function(){ tone(140, 1.2, 'sawtooth', 0.05, 90); },
+    hum: function(){ tone(80, 3.2, 'sawtooth', 0.03, 60); }
+  };
+})();
+
+/* ================= الملف الشخصي والحفظ ================= */
+const STORE_KEY = 'syria_ctrl_v1';
+const P = { name:'القائد', gold:0, xp:0, wins:0, skins:['std'], skin:'std', leaders:[], leaderEq:-1,
+  tasks:null, taskDay:'', faction:'regime', mode:'classic', room:'', bonusNext:false };
+function loadP(){
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw){ const o = JSON.parse(raw); Object.keys(P).forEach(k => { if (o[k] !== undefined) P[k] = o[k]; }); }
+  } catch(e){}
+}
+function saveP(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(P)); } catch(e){} }
+function levelOf(){ return Math.floor(P.xp / 250) + 1; }
+
+const TASK_DEFS = [
+  { id:'win',  name:'اربح جولة واحدة',       target:1,  gold:60, xp:40 },
+  { id:'send', name:'أرسل 25 رتلاً',         target:25, gold:40, xp:30 },
+  { id:'cap',  name:'استولِ على 3 مناطق',    target:3,  gold:50, xp:35 },
+  { id:'abil', name:'استخدم قدرة مرتين',     target:2,  gold:30, xp:20 }
+];
+function ensureTasks(){
+  const day = new Date().toISOString().slice(0, 10);
+  if (P.taskDay !== day || !Array.isArray(P.tasks)){
+    P.taskDay = day;
+    P.tasks = TASK_DEFS.map(t => ({ id:t.id, prog:0, claimed:false }));
+    saveP();
+  }
+}
+function addTask(id, n){
+  ensureTasks();
+  const t = P.tasks.find(x => x.id === id);
+  const def = TASK_DEFS.find(x => x.id === id);
+  if (t && def && !t.claimed) t.prog = Math.min(def.target, t.prog + n);
+}
+
+/* ================= أدوات DOM ================= */
+function $(id){ return document.getElementById(id); }
+let toastTimer = 0;
+function toast(msg){
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2200);
+}
+let centerTimer = 0;
+function showCenter(msg){
+  const el = $('centerMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(centerTimer);
+  centerTimer = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+}
+
+/* ================= الردهة ================= */
+const SHORT = { regime:'النظام', opp:'المعارضة', qsd:'قسد', isis:'التنظيم', purple:'الغزاة' };
+function buildFactionCards(){
+  const box = $('factionCards');
+  box.innerHTML = '';
+  FKEYS.forEach(function(k){
+    const f = FACTIONS[k];
+    const d = document.createElement('div');
+    d.className = 'fcard ' + f.cls + (P.faction === k ? ' sel' : '');
+    d.dataset.key = k;
+    d.style.cursor = 'pointer';
+    d.innerHTML = '<h4>' + f.name + ' (' + f.troops + ' جندياً)</h4>' +
+      '<div>المميزات: ' + f.feat + '</div>' +
+      '<div>قدرة الدعم: ' + f.supName + ' (+30)</div>' +
+      '<div>قدرة القصف: ' + f.strName + ' (-35%)</div>';
+    d.addEventListener('click', function(){ P.faction = k; saveP(); buildFactionCards(); });
+    if (P.faction === k){ d.style.outline = '2px solid #f5c542'; }
+    box.appendChild(d);
+  });
+}
+function setMode(m){
+  P.mode = m; saveP();
+  document.querySelectorAll('.mode').forEach(function(b){ b.classList.toggle('active', b.dataset.mode === m); });
+}
+
+function renderLobby(){
+  $('statGold').textContent = P.gold;
+  $('goldTree').textContent = P.gold;
+  $('statXp').textContent = P.xp;
+  $('statLvl').textContent = levelOf();
+  $('statWins').textContent = P.wins;
+  // شجرة القادة
+  const ll = $('leaderList');
+  ll.innerHTML = '';
+  LEADERS.forEach(function(L){
+    const owned = P.leaders.indexOf(L.id) >= 0;
+    const eq = P.leaderEq === L.id;
+    const d = document.createElement('div');
+    d.className = 'skin-item' + (eq ? ' equipped' : '');
+    d.innerHTML = '<b>' + L.name + '</b><div class="small">' + L.bonus + '</div>';
+    const b = document.createElement('button');
+    b.style.marginTop = '6px'; b.style.width = '100%';
+    if (!owned){
+      b.textContent = 'فتح (' + L.cost + ' ذهب)';
+      b.className = 'gold';
+      b.disabled = P.gold < L.cost;
+      b.addEventListener('click', function(){
+        if (P.gold < L.cost) return;
+        P.gold -= L.cost; P.leaders.push(L.id); saveP(); renderLobby(); toast('تم فتح ' + L.name);
+      });
+    } else {
+      b.textContent = eq ? 'معيّن ✓ (اضغط لإلغاء التعيين)' : 'تعيين';
+      b.className = eq ? 'primary' : '';
+      b.addEventListener('click', function(){ P.leaderEq = eq ? -1 : L.id; saveP(); renderLobby(); });
+    }
+    d.appendChild(b);
+    ll.appendChild(d);
+  });
+  // المهام
+  ensureTasks();
+  const tl = $('taskList');
+  tl.innerHTML = '';
+  TASK_DEFS.forEach(function(def){
+    const st = P.tasks.find(function(x){ return x.id === def.id; });
+    const pct = Math.round(st.prog / def.target * 100);
+    const row = document.createElement('div');
+    row.className = 'task';
+    row.innerHTML = '<div style="flex:1"><div><b>' + def.name + '</b></div>' +
+      '<div class="small">' + st.prog + ' / ' + def.target + ' — المكافأة: ' + def.gold + ' ذهب و' + def.xp + ' خبرة</div>' +
+      '<div class="bar"><i style="width:' + pct + '%"></i></div></div>';
+    const b = document.createElement('button');
+    if (st.claimed){ b.textContent = 'تم ✓'; b.disabled = true; }
+    else if (st.prog >= def.target){
+      b.textContent = 'استلام'; b.className = 'gold';
+      b.addEventListener('click', function(){
+        st.claimed = true; P.gold += def.gold; P.xp += def.xp; saveP(); renderLobby(); toast('+' + def.gold + ' ذهب و +' + def.xp + ' خبرة');
+      });
+    } else { b.textContent = 'قيد التقدم'; b.disabled = true; }
+    row.appendChild(b);
+    tl.appendChild(row);
+  });
+  // الغنائم
+  const sl = $('skinList');
+  sl.innerHTML = '';
+  SKINS.forEach(function(s){
+    const owned = P.skins.indexOf(s.id) >= 0;
+    const d = document.createElement('div');
+    d.className = 'skin-item' + (P.skin === s.id ? ' equipped' : '');
+    d.innerHTML = '<b>' + s.name + '</b><div class="small">' + s.desc + '</div>';
+    const b = document.createElement('button');
+    b.style.marginTop = '6px'; b.style.width = '100%';
+    if (!owned){
+      b.textContent = 'شراء (' + s.price + ' ذهب)'; b.disabled = P.gold < s.price;
+      b.addEventListener('click', function(){
+        if (P.gold < s.price) return;
+        P.gold -= s.price; P.skins.push(s.id); P.skin = s.id; saveP(); renderLobby(); toast('تم شراء ' + s.name + ' وتفعيله');
+      });
+    } else {
+      b.textContent = P.skin === s.id ? 'مفعّل ✓' : 'تفعيل';
+      b.disabled = P.skin === s.id;
+      b.addEventListener('click', function(){ P.skin = s.id; saveP(); renderLobby(); });
+    }
+    d.appendChild(b);
+    sl.appendChild(d);
+  });
+}
+
+function openCrate(){
+  const cost = 120;
+  if (P.gold < cost){ toast('الذهب غير كافٍ'); return; }
+  P.gold -= cost;
+  const pool = SKINS.filter(function(s){ return s.id !== 'std' && P.skins.indexOf(s.id) < 0; });
+  if (pool.length === 0){
+    P.gold += 50; saveP(); renderLobby(); toast('كل المظاهر مفتوحة — تم استرداد 50 ذهب');
+    return;
+  }
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  P.skins.push(pick.id); P.skin = pick.id;
+  saveP(); renderLobby();
+  toast('🎁 ربحت: ' + pick.name);
+}
+
+function setupLobby(){
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('active', x === t); });
+      document.querySelectorAll('.pane').forEach(function(p){ p.classList.toggle('active', p.id === 'pane-' + t.dataset.tab); });
+    });
+  });
+  document.querySelectorAll('.mode').forEach(function(b){ b.addEventListener('click', function(){ setMode(b.dataset.mode); }); });
+  setMode(P.mode);
+  $('playerName').value = P.name;
+  $('roomCode').value = P.room;
+  $('playerName').addEventListener('change', function(){ P.name = $('playerName').value.trim() || 'القائد'; saveP(); });
+  $('btnCreate').addEventListener('click', function(){
+    P.room = ($('roomCode').value.trim() || ('ROOM' + Math.floor(Math.random() * 9000 + 1000))).slice(0, 8);
+    saveP(); $('roomCode').value = P.room; startGame();
+  });
+  $('btnJoin').addEventListener('click', function(){
+    const code = $('roomCode').value.trim();
+    if (!code){ toast('أدخل رمز الغرفة أولاً'); return; }
+    P.room = code.slice(0, 8); saveP(); startGame();
+  });
+  $('btnAdReward').addEventListener('click', function(){
+    const b = $('btnAdReward');
+    if (b.disabled) return;
+    b.disabled = true; let n = 3; b.textContent = 'جارٍ عرض الإعلان... ' + n;
+    const iv = setInterval(function(){
+      n--;
+      if (n > 0){ b.textContent = 'جارٍ عرض الإعلان... ' + n; return; }
+      clearInterval(iv);
+      P.bonusNext = true; saveP();
+      b.disabled = false; b.textContent = '✅ تم: +20% قوات بداية';
+      toast('ستبدأ الجولة القادمة بـ +20% قوات');
+    }, 1000);
+  });
+  $('btnOpenCrate').addEventListener('click', openCrate);
+  buildFactionCards();
+  renderLobby();
+}
+/* ================= التحكم باللعبة ================= */
+let inGame = false, endShown = false, scoreTick = 0, dragPos = null;
+
+function startGame(){
+  Sound.init();
+  const bonus = !!P.bonusNext;
+  P.bonusNext = false; saveP();
+  const pf = FID[P.faction];
+  newGame(P.mode, pf, { leader: P.leaderEq, bonus: bonus });
+  G.skin = P.skin;
+  G.fogOn = $('fogToggle').checked;
+  G.onEvent = showCenter;
+  inGame = true; endShown = false;
+  $('lobby').classList.add('hidden');
+  $('endOverlay').classList.add('hidden');
+  $('game').classList.remove('hidden');
+  $('hudFaction').textContent = FACTIONS[P.faction].name;
+  $('hudFaction').style.color = FACTIONS[P.faction].color;
+  $('abSupportTxt').textContent = FACTIONS[P.faction].supName;
+  $('abStrikeTxt').textContent = FACTIONS[P.faction].strName;
+  document.querySelectorAll('.sendRow .pct').forEach(function(b){ b.classList.toggle('active', parseFloat(b.dataset.pct) === G.pct); });
+  resizeCanvas();
+  fitSyria();
+  G.sent = 0;
+  toast('الغرفة: ' + (P.room || 'محلية') + ' — ' + MODES[P.mode].name);
+  scoreTick = 0;
+}
+
+function fmtTime(s){
+  s = Math.max(0, Math.ceil(s));
+  const m = Math.floor(s / 60), r = s % 60;
+  return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r;
+}
+
+function buildScores(){
+  const row = $('scoreRow');
+  const total = G.regs.length;
+  const alive = [0,1,2,3,4].filter(function(f){ return countOf(f) > 0 || f === G.pf || (f === 4 && G.purpleDone > 0); });
+  let leader = -1, best = -1;
+  alive.forEach(function(f){ const c = countOf(f) * 1000 + troopsOf(f); if (c > best){ best = c; leader = f; } });
+  let html = '';
+  alive.forEach(function(f){
+    const k = FNAME[f];
+    const info = supportInfo(f);
+    const pct = Math.round(countOf(f) / total * 100);
+    const cls = ['score', 'sc-' + k];
+    if (f === leader && countOf(f) > 0) cls.push('leader');
+    if (info.dead) cls.push('dead');
+    const sup = info.dead ? 'متوقف' : ('دعم +' + info.amt + (info.rank === 0 ? ' 🎯' : ''));
+    html += '<div class="' + cls.join(' ') + '"><span>' + (f === G.pf ? '★ ' : '') + SHORT[k] + '</span><b style="color:' + FACTIONS[k].color + '">' + pct + '%</b><span>' + sup + '</span></div>';
+  });
+  row.innerHTML = html;
+  row.style.gridTemplateColumns = 'repeat(' + Math.min(5, Math.max(4, alive.length)) + ', 1fr)';
+}
+
+function updateHud(dt){
+  if (!G) return;
+  $('timer').textContent = fmtTime(G.duration - G.time);
+  const info = supportInfo(G.pf);
+  $('supportLbl').textContent = info.dead ? 'دعم خارجي: متوقف' : ('دعم خارجي: +' + info.amt + ' جندياً' + (info.rank === 0 ? ' 🎯' : ''));
+  $('jamOverlay').classList.toggle('show', G.time < G.jamUntil);
+  $('btnSound').textContent = Sound.isOn() ? '🔊' : '🔇';
+  scoreTick -= dt;
+  if (scoreTick <= 0){ scoreTick = 0.25; buildScores(); }
+  const cs = $('cdSupport'), cst = $('cdStrike');
+  const cdSupTxt = G.cdSup > 0 ? Math.ceil(G.cdSup) + 's' : '';
+  const cdStrTxt = G.cdStr > 0 ? Math.ceil(G.cdStr) + 's' : '';
+  cs.textContent = cdSupTxt; cst.textContent = cdStrTxt;
+  $('abSupport').classList.toggle('cooling', G.cdSup > 0);
+  $('abStrike').classList.toggle('cooling', G.cdStr > 0);
+  const alive = countOf(G.pf) > 0;
+  $('abSupport').disabled = !alive;
+  $('abStrike').disabled = !alive;
+  $('sendHint').textContent = G.selected >= 0 ? ('المحدد: ' + G.regs[G.selected].name + ' — انقر هدفاً لإرسال ' + Math.round(G.pct * 100) + '%') : 'انقر منطقتك ثم انقر هدفاً لإرسال الرتل — أو اسحب بينهما.';
+  if (G.over && !endShown){ endShown = true; showEnd(); }
+}
+
+function selectRegion(id){
+  if (id < 0) { G.selected = -1; return; }
+  G.selected = id;
+  Sound.click();
+  const r = G.regs[id];
+  const box = $('infoPanel');
+  box.innerHTML = '<b>' + r.name + '</b><br>' +
+    (r.owner >= 0 ? 'الفصيل: ' + FACTIONS[FNAME[r.owner]].name : 'محايدة') + '<br>' +
+    'الجنود: ' + (isHiddenCount(r) ? '؟؟' : Math.round(r.troops)) +
+    (r.iso ? '<br><span style="color:#ffab40">⚠️ محاصرة</span>' : '') +
+    '<br><span class="small">الجيران: ' + ADJ[id].map(function(e){ return G.regs[e.to].name; }).join('، ') + '</span>';
+  box.classList.add('show');
+  clearTimeout(box._t);
+  box._t = setTimeout(function(){ box.classList.remove('show'); }, 5000);
+}
+
+function sendPlayer(src, dst){
+  if (!G || G.over) return;
+  if (G.time < G.jamUntil){ toast('📡 قطع الاتصالات — الأوامر متوقفة مؤقتاً'); return; }
+  if (src < 0 || G.regs[src].owner !== G.pf){ return; }
+  if (src === dst) return;
+  const amt = G.regs[src].troops * G.pct;
+  const c = sendConvoy(G.pf, src, dst, amt);
+  if (!c){ toast('لا يوجد طريق آمن عبر مناطقك إلى ' + G.regs[dst].name); return; }
+  G.sent++;
+  Sound.move();
+  if (G.pct <= 0.25){ G.reveal[dst] = G.time + 8; showCenter('استطلاع: كُشف عدد جنود ' + G.regs[dst].name); }
+}
+
+function handleTap(id){
+  if (!G || G.over || id < 0) { if (id < 0) G.selected = -1; return; }
+  const r = G.regs[id];
+  if (G.selected < 0){
+    if (r.owner === G.pf) selectRegion(id);
+    else { Sound.click(); }
+    return;
+  }
+  if (G.selected === id){ G.selected = -1; return; }
+  if (r.owner === G.pf){ selectRegion(id); return; }
+  if (G.regs[G.selected].owner === G.pf){ sendPlayer(G.selected, id); }
+  else selectRegion(id);
+}
+
+function pickSupportTarget(){
+  if (G.selected >= 0 && G.regs[G.selected].owner === G.pf) return G.regs[G.selected];
+  let best = null, bestFront = false;
+  for (const r of G.regs){
+    if (r.owner !== G.pf) continue;
+    const front = ADJ[r.id].some(function(e){ return G.regs[e.to].owner !== G.pf; });
+    if (front && (!best || !bestFront || r.troops < best.troops)){ best = r; bestFront = true; }
+    else if (!front && !bestFront && (!best || r.troops < best.troops)){ best = r; }
+  }
+  return best;
+}
+function useSupport(){
+  if (G.over) return;
+  if (G.time < G.jamUntil){ toast('📡 قطع الاتصالات'); return; }
+  if (G.cdSup > 0){ toast('القدرة قيد التهدئة'); return; }
+  const r = pickSupportTarget();
+  if (!r) return;
+  r.troops += 30; r.flash = 1;
+  G.cdSup = G.cdSupMax * (G.leader === 2 ? 0.8 : 1);
+  G.abil++; addTask('abil', 1);
+  addText(r.c.x, r.c.y, '+30 ' + FACTIONS[P.faction].supName, '#7ee787');
+  showCenter(FACTIONS[P.faction].supName + ' → ' + r.name);
+  Sound.chime();
+  saveP();
+}
+
+function pickStrikeTarget(){
+  if (G.selected >= 0){
+    const s = G.regs[G.selected];
+    if (s.owner !== G.pf && s.owner !== -1) return { target:s, from:null };
+  }
+  let best = null, from = null;
+  for (const src of G.regs){
+    if (src.owner !== G.pf) continue;
+    for (const e of ADJ[src.id]){
+      const d = G.regs[e.to];
+      if (d.owner === G.pf || d.owner === -1) continue;
+      if (!best || d.troops > best.troops){ best = d; from = src; }
+    }
+  }
+  return best ? { target:best, from:from } : null;
+}
+function useStrike(){
+  if (G.over) return;
+  if (G.time < G.jamUntil){ toast('📡 قطع الاتصالات'); return; }
+  if (G.cdStr > 0){ toast('القدرة قيد التهدئة'); return; }
+  const pick = pickStrikeTarget();
+  if (!pick){ toast('لا يوجد هدف معادٍ مناسب'); return; }
+  const t = pick.target;
+  const from = pick.from || G.regs[G.selected >= 0 ? G.selected : 0];
+  const fromR = pick.from || G.regs.find(function(r){ return r.owner === G.pf; }) || t;
+  G.planes.push({ k:'strike', fx:fromR.c.x, fy:fromR.c.y, tx:t.c.x, ty:t.c.y, t:0, dur:1.2, owner:G.pf, reg:t.id });
+  G.cdStr = G.cdStrMax * (G.leader === 2 ? 0.8 : 1);
+  G.abil++; addTask('abil', 1);
+  Sound.jet();
+  showCenter(FACTIONS[P.faction].strName + ' → ' + t.name);
+  saveP();
+}
+
+function refillAll(){
+  if (!G || G.over) return;
+  G.regs.forEach(function(r){ if (r.owner === G.pf) r.troops += 30; });
+  toast('إمداد فوري: +30 جندياً لكل منطقة');
+  Sound.chime();
+}
+
+
+function showEnd(){
+  const res = G.result || { win:false, reason:'time', rank:[] };
+  const ownAll = countOf(G.pf);
+  const captureGold = G.captures * 5;
+  let gold, xp;
+  if (res.win){ gold = 150; xp = 80; } else { gold = 20; xp = 20; }
+  gold += captureGold;
+  P.gold += gold; P.xp += xp;
+  if (res.win) P.wins++;
+  addTask('win', res.win ? 1 : 0);
+  addTask('send', G.sent);
+  addTask('cap', G.captures);
+  saveP();
+  let title = res.win ? '🏆 النصر!' : (res.reason === 'lose' ? '💥 خسرت كل مناطقك' : (res.reason === 'quit' ? '🏳️ انسحاب من المعركة' : '⏱ انتهى الوقت'));
+  if (res.reason === 'win') title = '🏆 سيطرة كاملة!';
+  $('endTitle').textContent = title;
+  $('endReason').textContent = 'الطور: ' + MODES[P.mode].name + ' — مناطقك النهائية: ' + ownAll + ' من ' + G.regs.length;
+  let rows = '';
+  (res.rank || []).forEach(function(f, i){
+    rows += '<tr><td>' + (i + 1) + '</td><td style="color:' + FACTIONS[FNAME[f]].color + '">' + (f === G.pf ? '★ ' : '') + FACTIONS[FNAME[f]].name + '</td><td>' + countOf(f) + '</td><td>' + Math.round(troopsOf(f)) + '</td></tr>';
+  });
+  $('endTable').innerHTML = rows;
+  $('endRewards').textContent = 'المكافآت: +' + gold + ' ذهب (منها ' + captureGold + ' من الاستيلاء) و+' + xp + ' خبرة';
+  $('endOverlay').classList.remove('hidden');
+}
+
+function exitToLobby(){
+  inGame = false;
+  $('game').classList.add('hidden');
+  $('endOverlay').classList.add('hidden');
+  $('lobby').classList.remove('hidden');
+  G = null;
+  renderLobby();
+}
+
+/* ================= الإدخال: لمس وماوس ================= */
+const pointers = new Map();
+let pinchStart = null, panStart = null, dragSrc = -1, moved = false;
+function relPos(e){
+  const r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+function pointerDist(){
+  const pts = Array.from(pointers.values());
+  if (pts.length < 2) return 1;
+  return Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y) || 1;
+}
+canvas.addEventListener('pointerdown', function(e){
+  if (!inGame || !G) return;
+  canvas.setPointerCapture(e.pointerId);
+  const p = relPos(e);
+  pointers.set(e.pointerId, p);
+  if (pointers.size === 1){
+    moved = false;
+    panStart = { cx: cam.cx, cy: cam.cy, x: p.x, y: p.y };
+    const rid = regionAt(p.x, p.y);
+    dragSrc = (rid >= 0 && G.regs[rid].owner === G.pf) ? rid : -1;
+  } else if (pointers.size === 2){
+    moved = true;
+    pinchStart = { d: pointerDist(), s: cam.s };
+    dragSrc = -1;
+  }
+});
+canvas.addEventListener('pointermove', function(e){
+  if (!pointers.has(e.pointerId)) return;
+  const p = relPos(e);
+  pointers.set(e.pointerId, p);
+  if (pointers.size >= 2 && pinchStart){
+    cam.s = pinchStart.s * pointerDist() / pinchStart.d;
+    clampCam();
+    return;
+  }
+  if (pointers.size === 1 && panStart){
+    const dx = p.x - panStart.x, dy = p.y - panStart.y;
+    if (Math.hypot(dx, dy) > 8) moved = true;
+    if (dragSrc >= 0 && moved){ dragPos = p; }
+    else if (moved){
+      cam.cx = panStart.cx - dx / cam.s;
+      cam.cy = panStart.cy - dy / cam.s;
+      clampCam();
+    }
+  }
+});
+function endPointer(e){
+  if (!pointers.has(e.pointerId)) return;
+  const p = relPos(e);
+  pointers.delete(e.pointerId);
+  if (pointers.size === 0){
+    if (!pinchStart && !moved){ handleTap(regionAt(p.x, p.y)); }
+    else if (dragSrc >= 0 && moved && !pinchStart){
+      const dst = regionAt(p.x, p.y);
+      if (dst >= 0 && dst !== dragSrc) sendPlayer(dragSrc, dst);
+      else if (dst === dragSrc) selectRegion(dragSrc);
+    }
+    pinchStart = null; dragSrc = -1; dragPos = null; panStart = null;
+  } else if (pointers.size === 1){
+    pinchStart = null;
+  }
+}
+canvas.addEventListener('pointerup', endPointer);
+canvas.addEventListener('pointercancel', endPointer);
+canvas.addEventListener('wheel', function(e){
+  if (!inGame) return;
+  e.preventDefault();
+  const p = relPos(e);
+  const before = toW(p.x, p.y);
+  cam.s *= (e.deltaY < 0 ? 1.12 : 0.9);
+  clampCam();
+  const after = toW(p.x, p.y);
+  cam.cx += before.x - after.x; cam.cy += before.y - after.y;
+  clampCam();
+}, { passive:false });
+
+function drawDragHint(){
+  if (!dragPos || dragSrc < 0 || !G) return;
+  setScreen();
+  const a = toS(G.regs[dragSrc].c.x, G.regs[dragSrc].c.y);
+  ctx.strokeStyle = 'rgba(245,197,66,.9)';
+  ctx.lineWidth = 2.5;
+  ctx.setLineDash([6, 5]);
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(dragPos.x, dragPos.y); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+/* ================= الأزرار ================= */
+function setupGameButtons(){
+  $('btnTools').addEventListener('click', function(){ $('toolsDrawer').classList.toggle('open'); $('emoteDrawer').classList.remove('open'); });
+  $('btnEmote').addEventListener('click', function(){ $('emoteDrawer').classList.toggle('open'); $('toolsDrawer').classList.remove('open'); });
+  $('btnAbout').addEventListener('click', function(){ toast('📺 شحن: أعلان تجريبي — لا توجد شبكة إعلانية فعلية'); });
+  $('btnSound').addEventListener('click', function(){ Sound.init(); Sound.toggle(); });
+  $('btnHelp').addEventListener('click', function(){ $('helpOverlay').classList.remove('hidden'); });
+  $('btnHelpClose').addEventListener('click', function(){ $('helpOverlay').classList.add('hidden'); });
+  $('btnQuit').addEventListener('click', function(){ if (G && !G.over){ G.over = true; G.result = { win:false, reason:'quit', rank:[] }; endShown = true; showEnd(); } });
+  $('btnAgain').addEventListener('click', function(){ $('endOverlay').classList.add('hidden'); startGame(); });
+  $('btnToLobby').addEventListener('click', exitToLobby);
+  $('fogToggle').addEventListener('change', function(){ if (G) G.fogOn = $('fogToggle').checked; });
+  $('btnRefill').addEventListener('click', refillAll);
+  $('btnTestStorm').addEventListener('click', function(){ if (G){ G.stormUntil = G.time + 15; showCenter('🌪️ عاصفة البادية الرملية'); Sound.wind(); } });
+  $('btnTestJam').addEventListener('click', function(){ if (G){ G.jamUntil = G.time + 10; showCenter('📡 قطع الاتصالات'); } });
+  document.querySelectorAll('[data-emote]').forEach(function(b){
+    b.addEventListener('click', function(){
+      if (!G) return;
+      const r = G.selected >= 0 && G.regs[G.selected].owner === G.pf ? G.regs[G.selected] : G.regs[FCAP(G.pf)];
+      addText(r.c.x, r.c.y, b.dataset.emote, '#fff');
+      Sound.click();
+    });
+  });
+  $('btnTargetLeader').addEventListener('click', function(){
+    if (!G) return;
+    G.rally = G.time + 20;
+    showCenter('🎯 البوتات تستهدف المتصدر لمدة 20 ثانية');
+    const leader = supportRanking()[0];
+    if (leader !== undefined){ const r = G.regs.find(function(x){ return x.owner === leader; }); if (r) addText(r.c.x, r.c.y, '🎯', '#ffd54f'); }
+  });
+  document.querySelectorAll('.sendRow .pct').forEach(function(b){
+    b.addEventListener('click', function(){
+      G.pct = parseFloat(b.dataset.pct);
+      document.querySelectorAll('.sendRow .pct').forEach(function(x){ x.classList.toggle('active', x === b); });
+      Sound.click();
+    });
+  });
+  $('camIn').addEventListener('click', function(){ cam.s *= 1.25; clampCam(); });
+  $('camOut').addEventListener('click', function(){ cam.s *= 0.8; clampCam(); });
+  $('camReset').addEventListener('click', fitSyria);
+  $('camWorld').addEventListener('click', fitWorld);
+  $('abSupport').addEventListener('click', useSupport);
+  $('abStrike').addEventListener('click', useStrike);
+}
+function FCAP(owner){ return BASE_REGION_BASE[FNAME[owner]] !== undefined ? BASE_REGION_BASE[FNAME[owner]] : 0; }
+
+/* ================= الحلقة الرئيسية ================= */
+let lastTs = 0;
+function frame(ts){
+  const dt = Math.min(0.05, Math.max(0, (ts - lastTs) / 1000 || 0));
+  lastTs = ts;
+  try {
+    if (inGame && G && !G.over) engineStep(dt);
+    if (inGame && G) updateHud(dt);
+    renderFrame(ts / 1000);
+    drawDragHint();
+  } catch (err) {
+    if (window.console) console.error(err);
+  }
+  requestAnimationFrame(frame);
+}
+
+window.addEventListener('resize', function(){ if (inGame) resizeCanvas(); });
+window.addEventListener('orientationchange', function(){ if (inGame) setTimeout(resizeCanvas, 200); });
+
+(function init(){
+  loadP();
+  buildAdj();
+  ensureTasks();
+  setupLobby();
+  setupGameButtons();
+  resizeCanvas();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
